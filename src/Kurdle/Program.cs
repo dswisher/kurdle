@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Reflection;
+using Autofac;
+using Yaclops;
+
 
 namespace Kurdle
 {
@@ -10,7 +11,49 @@ namespace Kurdle
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello world!");
+            try
+            {
+                var container = CreateContainer();
+
+                var parser = container.Resolve<CommandLineParser>();
+
+                var command = parser.Parse(args);
+
+                command.Execute();
+            }
+            catch (CommandLineParserException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Unhandled exception in main.");
+                Console.WriteLine(ex);
+            }
+
+
+            if (Debugger.IsAttached)
+            {
+                Console.Write("<press ENTER to continue>");
+                Console.ReadLine();
+            }
+        }
+
+
+
+        private static IContainer CreateContainer()
+        {
+            ContainerBuilder builder = new ContainerBuilder();
+
+            // Command-line specific stuff
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+                .Where(t => typeof(ISubCommand).IsAssignableFrom(t) && t.IsPublic)
+                .SingleInstance()
+                .As<ISubCommand>();
+
+            builder.RegisterType<CommandLineParser>();
+
+            return builder.Build();
         }
     }
 }
