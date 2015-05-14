@@ -14,27 +14,57 @@ namespace Kurdle.Services
     }
 
 
+
     public class ProjectInfo : IProjectInfo
     {
+        private DirectoryInfo _root;
+
+        public DirectoryInfo OutputDirectory { get; private set; }
+        public string SiteName { get; private set; }
+
+
         public void Init()
         {
             // Walk up the directory tree until we find the project info file
-            FileInfo projectFile = FindProjectFile();
-            Console.WriteLine("   -> Project file: {0}", projectFile.FullName);
-
-            // Parse the project info
-            ParseProjectInfo(projectFile);
+            FindAndParseProjectFile();
 
             // Parse the user-specific overrides, if any
-            FileInfo userFile = SearchDirectoryForUserFile(projectFile.Directory);
-            if (userFile != null)
-            {
-                Console.WriteLine("   -> User file:    {0}", projectFile.FullName);
-                ParseProjectInfo(userFile);
-            }
+            FindAndParseUserFile();
 
+            // Scan for all the document files
+            ScanForDocuments(_root);
+
+            // Dump out some info
             Console.WriteLine();
             Console.WriteLine("   -> Output: {0}", (OutputDirectory == null ? "(null)" : OutputDirectory.FullName));
+        }
+
+
+
+        private void ScanForDocuments(DirectoryInfo dir)
+        {
+            foreach (var file in dir.GetFiles())
+            {
+                var extension = Path.GetExtension(file.Name).Substring(1).ToLower();
+
+                switch (extension)
+                {
+                    case "md":
+                        // TODO - scan header and make entry in info list
+                        Console.WriteLine("Markdown!  {0}", file.Name);
+                        break;
+
+                    case "txt":
+                        // TODO - scan header and make entry in info list
+                        Console.WriteLine("AsciiDoc!  {0}", file.Name);
+                        break;
+                }
+            }
+
+            foreach (var subdir in dir.GetDirectories())
+            {
+                ScanForDocuments(subdir);
+            }
         }
 
 
@@ -85,10 +115,6 @@ namespace Kurdle.Services
 
 
 
-        public DirectoryInfo OutputDirectory { get; private set; }
-        public string SiteName { get; private set; }
-
-
         private DirectoryInfo ParseDirectory(FileInfo root, string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -110,7 +136,7 @@ namespace Kurdle.Services
 
 
 
-        private FileInfo FindProjectFile()
+        private void FindAndParseProjectFile()
         {
             DirectoryInfo dir = new DirectoryInfo(Environment.CurrentDirectory);
 
@@ -121,7 +147,10 @@ namespace Kurdle.Services
 
                 if (info != null)
                 {
-                    return info;
+                    ParseProjectInfo(info);
+                    _root = info.Directory;
+                    Console.WriteLine("   -> Project file: {0}", info.FullName);
+                    return;
                 }
 
                 // Walk up to the parent
@@ -144,13 +173,17 @@ namespace Kurdle.Services
 
 
 
-        private FileInfo SearchDirectoryForUserFile(DirectoryInfo dir)
+        private void FindAndParseUserFile()
         {
-            var info = dir.GetFiles("project.user").FirstOrDefault();
+            var info = _root.GetFiles("project.user").FirstOrDefault();
 
             // TODO - search for other names?
 
-            return info;
+            if (info != null)
+            {
+                Console.WriteLine("   -> User file:    {0}", info.FullName);
+                ParseProjectInfo(info);
+            }
         }
     }
 }
