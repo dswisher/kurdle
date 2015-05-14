@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Reflection;
 using Autofac;
+using Kurdle.Misc;
+using Kurdle.Services;
 using Yaclops;
 
 
@@ -25,6 +27,10 @@ namespace Kurdle
             {
                 Console.WriteLine(ex.Message);
             }
+            catch (ProjectException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             catch (Exception ex)
             {
                 Console.WriteLine("Unhandled exception in main.");
@@ -44,6 +50,9 @@ namespace Kurdle
         private static IContainer CreateContainer()
         {
             ContainerBuilder builder = new ContainerBuilder();
+
+            // Services; consider switching to auto-register scheme if we get too many
+            builder.RegisterType<ProjectInfo>().As<IProjectInfo>();
 
             // Command-line specific stuff
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())

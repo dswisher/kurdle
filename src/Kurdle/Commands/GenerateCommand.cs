@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Kurdle.Services;
 using Yaclops;
 using Yaclops.Attributes;
 
@@ -12,8 +9,18 @@ namespace Kurdle.Commands
     [Summary("Generate a website based on the current directory tree.")]
     public class GenerateCommand : ISubCommand
     {
+        private readonly IProjectInfo _projectInfo;
+
+        public GenerateCommand(IProjectInfo projectInfo)
+        {
+            _projectInfo = projectInfo;
+        }
+
+
         public void Execute()
         {
+            _projectInfo.Init();
+
             Console.WriteLine("Generate is not yet implemented!");
         }
 
