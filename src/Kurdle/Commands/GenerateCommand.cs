@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Kurdle.Services;
 using Yaclops;
 using Yaclops.Attributes;
@@ -10,18 +9,20 @@ namespace Kurdle.Commands
     public class GenerateCommand : ISubCommand
     {
         private readonly IProjectInfo _projectInfo;
+        private readonly ISiteGenerator _siteGenerator;
 
-        public GenerateCommand(IProjectInfo projectInfo)
+
+        public GenerateCommand(IProjectInfo projectInfo, ISiteGenerator siteGenerator)
         {
             _projectInfo = projectInfo;
+            _siteGenerator = siteGenerator;
         }
 
 
         public void Execute()
         {
             _projectInfo.Init();
-
-            Console.WriteLine("Generate is not yet implemented!");
+            _siteGenerator.Generate(_projectInfo, DryRun);
         }
 
 

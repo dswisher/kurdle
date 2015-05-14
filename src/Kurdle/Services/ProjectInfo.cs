@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Kurdle.Misc;
 
 namespace Kurdle.Services
@@ -22,12 +19,21 @@ namespace Kurdle.Services
         {
             // Walk up the directory tree until we find the project info file
             FileInfo projectFile = FindProjectFile();
+            Console.WriteLine("   -> Project file: {0}", projectFile.FullName);
 
             // Parse the project info
             ParseProjectInfo(projectFile);
 
             // Parse the user-specific overrides, if any
-            // TODO
+            FileInfo userFile = SearchDirectoryForUserFile(projectFile.Directory);
+            if (userFile != null)
+            {
+                Console.WriteLine("   -> User file:    {0}", projectFile.FullName);
+                ParseProjectInfo(userFile);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("   -> Output: {0}", (OutputDirectory == null ? "(null)" : OutputDirectory.FullName));
         }
 
 
@@ -41,6 +47,14 @@ namespace Kurdle.Services
                 while ((data = reader.ReadLine()) != null)
                 {
                     lineNumber += 1;
+
+                    data = data.Trim();
+
+                    if (data.Length == 0)
+                    {
+                        continue;
+                    }
+
                     int pos = data.IndexOf(':');
                     string name = null;
                     string value = null;
@@ -53,11 +67,12 @@ namespace Kurdle.Services
                     switch (name)
                     {
                         case "output":
-                            OutputDirectory = new DirectoryInfo(value);
+                            OutputDirectory = ParseDirectory(projectFile, value);
                             break;
 
                         default:
-                            throw new ProjectException("Invalid project setting, line {0} of {1}.", lineNumber, projectFile.FullName);
+                            throw new ProjectException("Invalid project setting ({2}), line {0} of {1}.",
+                                lineNumber, projectFile.FullName, name ?? "[null]");
                     }
                 }
             }
@@ -68,16 +83,35 @@ namespace Kurdle.Services
         public DirectoryInfo OutputDirectory { get; private set; }
 
 
+        private DirectoryInfo ParseDirectory(FileInfo root, string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return null;
+            }
+
+            // Relative path?
+            if (!Path.IsPathRooted(path) && (root.Directory != null))
+            {
+                string rel = Path.Combine(root.Directory.FullName, path);
+
+                return new DirectoryInfo(rel);
+            }
+
+            // Absolute path
+            return new DirectoryInfo(path);
+        }
+
+
+
         private FileInfo FindProjectFile()
         {
             DirectoryInfo dir = new DirectoryInfo(Environment.CurrentDirectory);
 
             do
             {
-                Console.WriteLine("Looking in {0}...", dir.FullName);
-
                 // Look for the file
-                FileInfo info = SearchDirectory(dir);
+                FileInfo info = SearchDirectoryForProjectFile(dir);
 
                 if (info != null)
                 {
@@ -93,9 +127,20 @@ namespace Kurdle.Services
 
 
 
-        private FileInfo SearchDirectory(DirectoryInfo dir)
+        private FileInfo SearchDirectoryForProjectFile(DirectoryInfo dir)
         {
             var info = dir.GetFiles("project.dat").FirstOrDefault();
+
+            // TODO - search for other names?
+
+            return info;
+        }
+
+
+
+        private FileInfo SearchDirectoryForUserFile(DirectoryInfo dir)
+        {
+            var info = dir.GetFiles("project.user").FirstOrDefault();
 
             // TODO - search for other names?
 

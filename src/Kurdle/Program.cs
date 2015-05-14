@@ -53,6 +53,7 @@ namespace Kurdle
 
             // Services; consider switching to auto-register scheme if we get too many
             builder.RegisterType<ProjectInfo>().As<IProjectInfo>();
+            builder.RegisterType<SiteGenerator>().As<ISiteGenerator>();
 
             // Command-line specific stuff
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
