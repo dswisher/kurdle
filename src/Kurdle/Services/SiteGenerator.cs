@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
-using RazorEngine;
+using Kurdle.Misc;
+using Kurdle.Models;
 using RazorEngine.Templating;
 using RazorEngine.Configuration;
 
@@ -16,24 +17,28 @@ namespace Kurdle.Services
 
     public class SiteGenerator : ISiteGenerator
     {
-		private readonly IRazorEngineService _razorEngine;
+        private readonly IRazorEngineService _razorEngine;
 
 
-		public SiteGenerator()
-		{
-			var config = new TemplateServiceConfiguration();
+        public SiteGenerator()
+        {
+            var config = new TemplateServiceConfiguration
+            {
+                CachingProvider = new DefaultCachingProvider(t => {}),
+                DisableTempFileLocking = true,
+                TemplateManager = new EmbeddedTemplateManager("Kurdle.Templates")
+            };
 
-			config.TemplateManager = new EmbeddedTemplateManager("Kurdle.Templates");
+            _razorEngine = RazorEngineService.Create(config);
 
-			// TODO - configure the instance
-
-			_razorEngine = RazorEngineService.Create(config);
-		}
+            Console.WriteLine("Compiling templates...");
+            _razorEngine.Compile("Index", typeof(IndexModel));
+        }
 
 
         public void Generate(IProjectInfo projectInfo, bool dryRun)
         {
-            // TODO - this is just a quick hack to get something going
+            Console.WriteLine("Generating site...");
 
             // Make sure the output directory exists
             if (!dryRun)
@@ -44,6 +49,9 @@ namespace Kurdle.Services
                 }
             }
 
+            // TODO - implement this for real!
+            IndexModel model = new IndexModel { SiteName = projectInfo.SiteName };
+
             // Generate the home page
             if (!dryRun)
             {
@@ -51,15 +59,9 @@ namespace Kurdle.Services
 
                 using (var writer = file.CreateText())
                 {
-					_razorEngine.Compile("Index");
+                    var result = _razorEngine.Run("Index", typeof(IndexModel), model);
 
-					var result = _razorEngine.Run("Index", null, new { Name = "Homer" });
-
-					writer.Write(result);
-
-//                    writer.WriteLine("<html><head><title>My blog!</title></head><body>");
-//                    writer.WriteLine("<p>Coming soon!</p>");
-//                    writer.WriteLine("<body></html>");
+                    writer.Write(result);
                 }
             }
         }

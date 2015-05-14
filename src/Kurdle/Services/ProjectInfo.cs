@@ -10,6 +10,7 @@ namespace Kurdle.Services
         void Init();
 
         DirectoryInfo OutputDirectory { get; }
+        string SiteName { get; }
     }
 
 
@@ -70,6 +71,10 @@ namespace Kurdle.Services
                             OutputDirectory = ParseDirectory(projectFile, value);
                             break;
 
+                        case "sitename":
+                            SiteName = value;
+                            break;
+
                         default:
                             throw new ProjectException("Invalid project setting ({2}), line {0} of {1}.",
                                 lineNumber, projectFile.FullName, name ?? "[null]");
@@ -81,6 +86,7 @@ namespace Kurdle.Services
 
 
         public DirectoryInfo OutputDirectory { get; private set; }
+        public string SiteName { get; private set; }
 
 
         private DirectoryInfo ParseDirectory(FileInfo root, string path)
