@@ -1,4 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using RazorEngine;
+using RazorEngine.Templating;
+using RazorEngine.Configuration;
 
 
 namespace Kurdle.Services
@@ -12,6 +16,21 @@ namespace Kurdle.Services
 
     public class SiteGenerator : ISiteGenerator
     {
+		private readonly IRazorEngineService _razorEngine;
+
+
+		public SiteGenerator()
+		{
+			var config = new TemplateServiceConfiguration();
+
+			config.TemplateManager = new EmbeddedTemplateManager("Kurdle.Templates");
+
+			// TODO - configure the instance
+
+			_razorEngine = RazorEngineService.Create(config);
+		}
+
+
         public void Generate(IProjectInfo projectInfo, bool dryRun)
         {
             // TODO - this is just a quick hack to get something going
@@ -32,9 +51,15 @@ namespace Kurdle.Services
 
                 using (var writer = file.CreateText())
                 {
-                    writer.WriteLine("<html><head><title>My blog!</title></head><body>");
-                    writer.WriteLine("<p>Coming soon!</p>");
-                    writer.WriteLine("<body></html>");
+					_razorEngine.Compile("Index");
+
+					var result = _razorEngine.Run("Index", null, new { Name = "Homer" });
+
+					writer.Write(result);
+
+//                    writer.WriteLine("<html><head><title>My blog!</title></head><body>");
+//                    writer.WriteLine("<p>Coming soon!</p>");
+//                    writer.WriteLine("<body></html>");
                 }
             }
         }
