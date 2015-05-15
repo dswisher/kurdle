@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Kurdle.Misc;
@@ -11,16 +12,19 @@ namespace Kurdle.Services
 
         DirectoryInfo OutputDirectory { get; }
         string SiteName { get; }
+        IEnumerable<DocumentEntry> Documents { get; }
     }
 
 
 
     public class ProjectInfo : IProjectInfo
     {
+        private readonly List<DocumentEntry> _documents = new List<DocumentEntry>();
         private DirectoryInfo _root;
 
         public DirectoryInfo OutputDirectory { get; private set; }
         public string SiteName { get; private set; }
+        public IEnumerable<DocumentEntry> Documents { get { return _documents; } }
 
 
         public void Init()
@@ -50,13 +54,11 @@ namespace Kurdle.Services
                 switch (extension)
                 {
                     case "md":
-                        // TODO - scan header and make entry in info list
-                        Console.WriteLine("Markdown!  {0}", file.Name);
+                        _documents.Add(new DocumentEntry(DocumentKind.MarkDown, file));
                         break;
 
                     case "txt":
-                        // TODO - scan header and make entry in info list
-                        Console.WriteLine("AsciiDoc!  {0}", file.Name);
+                        _documents.Add(new DocumentEntry(DocumentKind.AsciiDoc, file));
                         break;
                 }
             }

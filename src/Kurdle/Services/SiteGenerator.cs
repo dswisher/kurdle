@@ -64,6 +64,30 @@ namespace Kurdle.Services
                     writer.Write(result);
                 }
             }
+
+            // Generate all the documents...
+            if (!dryRun)
+            {
+                foreach (var doc in projectInfo.Documents)
+                {
+                    if (doc.Kind != DocumentKind.MarkDown)
+                    {
+                        continue;
+                    }
+
+                    var file = GetFileInfo(projectInfo, Path.ChangeExtension(doc.Info.Name, ".html"));
+
+                    // TODO - only grab the innards - use layout to wrap everything
+
+                    using (var writer = file.CreateText())
+                    {
+                        using (var reader = doc.Info.OpenText())
+                        {
+                            CommonMark.CommonMarkConverter.Convert(reader, writer);
+                        }
+                    }
+                }
+            }
         }
 
 
