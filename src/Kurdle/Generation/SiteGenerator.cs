@@ -2,11 +2,11 @@
 using System.IO;
 using Kurdle.Misc;
 using Kurdle.Models;
-using RazorEngine.Templating;
+using Kurdle.Services;
 using RazorEngine.Configuration;
+using RazorEngine.Templating;
 
-
-namespace Kurdle.Services
+namespace Kurdle.Generation
 {
     public interface ISiteGenerator
     {
@@ -17,11 +17,13 @@ namespace Kurdle.Services
 
     public class SiteGenerator : ISiteGenerator
     {
+        private readonly IPageGeneratorFactory _pageGeneratorFactory;
         private readonly IRazorEngineService _razorEngine;
 
 
-        public SiteGenerator()
+        public SiteGenerator(IPageGeneratorFactory pageGeneratorFactory)
         {
+            _pageGeneratorFactory = pageGeneratorFactory;
             var config = new TemplateServiceConfiguration
             {
                 CachingProvider = new DefaultCachingProvider(t => {}),

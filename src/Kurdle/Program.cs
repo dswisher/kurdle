@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using Autofac;
+using Kurdle.Generation;
 using Kurdle.Misc;
 using Kurdle.Services;
 using Yaclops;
@@ -53,6 +54,7 @@ namespace Kurdle
 
             // Services; consider switching to auto-register scheme if we get too many
             builder.RegisterType<ProjectInfo>().As<IProjectInfo>();
+            builder.RegisterType<PageGeneratorFactory>().As<IPageGeneratorFactory>();
             builder.RegisterType<SiteGenerator>().As<ISiteGenerator>();
 
             // Command-line specific stuff

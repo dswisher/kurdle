@@ -57,6 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\GenerateCommand.cs" />
+    <Compile Include="Generation\AbstractPageGenerator.cs" />
+    <Compile Include="Generation\MarkDownPageGenerator.cs" />
+    <Compile Include="Generation\PageGeneratorFactory.cs" />
     <Compile Include="Misc\EmbeddedTemplateKey.cs" />
     <Compile Include="Misc\ProjectException.cs" />
     <Compile Include="Models\BaseModel.cs" />
@@ -65,7 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DocumentEntry.cs" />
     <Compile Include="Services\ProjectInfo.cs" />
-    <Compile Include="Services\SiteGenerator.cs" />
+    <Compile Include="Generation\SiteGenerator.cs" />
     <Compile Include="Misc\EmbeddedTemplateManager.cs" />
   </ItemGroup>
   <ItemGroup>
