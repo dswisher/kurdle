@@ -17,6 +17,7 @@ This tool would not be possible without a number of third party libraries:
 
 - [Responsive Test Tool](http://mattkersley.com/responsive/)
 
+
 ## Similar Tools ##
 
 ### .NET ###
@@ -27,3 +28,8 @@ This tool would not be possible without a number of third party libraries:
 ### Ruby ###
 
 - [Jekyll](https://github.com/jekyll/jekyll)
+
+
+## Links ##
+
+- [Using CSS/HTML to Make a Responsive Website in 3 Easy Steps](http://css.dzone.com/articles/using-csshtml-make-responsive)
