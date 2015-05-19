@@ -13,6 +13,10 @@ This tool would not be possible without a number of third party libraries:
 - [YamlDotNet](http://aaubry.net/pages/yamldotnet.html)  ([github](https://github.com/aaubry/YamlDotNet))
 
 
+## Useful Things ##
+
+- [Responsive Test Tool](http://mattkersley.com/responsive/)
+
 ## Similar Tools ##
 
 ### .NET ###
