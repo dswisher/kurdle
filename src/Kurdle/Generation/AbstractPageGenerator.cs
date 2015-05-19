@@ -45,15 +45,49 @@ namespace Kurdle.Generation
             // And write out.
             if (!dryRun)
             {
-                var filePath = Path.ChangeExtension(_entry.Info.Name, ".html");
-                var path = Path.Combine(_projectInfo.OutputDirectory.FullName, filePath);
-                var file = new FileInfo(Path.GetFullPath(path));
+                var dir = GetOutputDirectory();
+
+                MakeDir(dir);
+
+                var file = GetOutputPath(dir);
 
                 using (var writer = file.CreateText())
                 {
                     writer.Write(result);
                 }
             }
+        }
+
+
+
+        private void MakeDir(DirectoryInfo dir)
+        {
+            if (!dir.Exists)
+            {
+                MakeDir(dir.Parent);
+
+                dir.Create();
+            }
+        }
+
+
+
+        private DirectoryInfo GetOutputDirectory()
+        {
+            var subdir = Path.Combine(_projectInfo.OutputDirectory.FullName, _entry.SubDirectory);
+
+            return new DirectoryInfo(subdir);
+        }
+
+
+
+        private FileInfo GetOutputPath(DirectoryInfo outputDirectory)
+        {
+            var outputName = Path.ChangeExtension(_entry.Info.Name, ".html");
+            var path = Path.Combine(outputDirectory.FullName, outputName);
+            var file = new FileInfo(Path.GetFullPath(path));
+
+            return file;
         }
 
 

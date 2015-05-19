@@ -1,8 +1,10 @@
 
 ## Generator ##
 
-- Directory structure should be preserved
 - Need to copy images, scripts, etc.
+- Should bundle javascript (and perhaps css)
+- The relative path to the script directory should be part of DocumentModel
+- The relative path to the "main" image directory should be part of DocumentModel
 
 
 ## Other Markup ##

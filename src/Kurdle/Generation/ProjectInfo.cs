@@ -39,7 +39,7 @@ namespace Kurdle.Generation
             FindAndParseUserFile();
 
             // Scan for all the document files
-            ScanForDocuments(_root);
+            ScanForDocuments(_root, string.Empty);
 
             // Dump out some info
             Console.WriteLine();
@@ -48,8 +48,10 @@ namespace Kurdle.Generation
 
 
 
-        private void ScanForDocuments(DirectoryInfo dir)
+        private void ScanForDocuments(DirectoryInfo dir, string path)
         {
+            Console.WriteLine("...scanning {0}...", path);
+
             foreach (var file in dir.GetFiles())
             {
                 var extension = Path.GetExtension(file.Name).Substring(1).ToLower();
@@ -69,14 +71,16 @@ namespace Kurdle.Generation
                         continue;
                 }
 
-                var entry = new DocumentEntry(kind, file, ScanHeader(file));
+                var entry = new DocumentEntry(kind, file, ScanHeader(file), path);
 
                 _documents.Add(entry);
             }
 
             foreach (var subdir in dir.GetDirectories())
             {
-                ScanForDocuments(subdir);
+                var subpath = Path.Combine(path, subdir.Name);
+
+                ScanForDocuments(subdir, subpath);
             }
         }
 
