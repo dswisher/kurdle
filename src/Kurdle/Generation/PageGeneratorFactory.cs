@@ -1,38 +1,63 @@
 ﻿using System;
-using Kurdle.Services;
+using System.Collections.Generic;
+using Kurdle.Misc;
+using RazorEngine.Configuration;
+using RazorEngine.Templating;
 
 namespace Kurdle.Generation
 {
     public interface IPageGeneratorFactory
     {
-        AbstractPageGenerator Create(DocumentEntry entry);
+        AbstractPageGenerator Create(IProjectInfo projectInfo, DocumentEntry entry);
     }
 
 
 
     public class PageGeneratorFactory : IPageGeneratorFactory
     {
+        private readonly IRazorEngineService _razorEngine;
+        private readonly HashSet<string> _compiledTemplates = new HashSet<string>();
 
-        public AbstractPageGenerator Create(DocumentEntry entry)
+
+        public PageGeneratorFactory()
         {
+            var config = new TemplateServiceConfiguration
+            {
+                CachingProvider = new DefaultCachingProvider(t => { }),
+                DisableTempFileLocking = true,
+                TemplateManager = new EmbeddedTemplateManager("Kurdle.Templates")
+            };
+
+            _razorEngine = RazorEngineService.Create(config);
+        }
+
+
+
+        public AbstractPageGenerator Create(IProjectInfo projectInfo, DocumentEntry entry)
+        {
+            // Make sure the template is ready...
+            if (!_compiledTemplates.Contains(entry.Template))
+            {
+                Console.WriteLine("...compiling '{0}' template...", entry.Template);
+                _razorEngine.Compile(entry.Template, typeof(DocumentModel));
+                _compiledTemplates.Add(entry.Template);
+            }
+
             // Construct the page generator itself...
             AbstractPageGenerator generator;
             switch (entry.Kind)
             {
                 case DocumentKind.MarkDown:
-                    generator = new MarkDownPageGenerator(entry);
+                    generator = new MarkDownPageGenerator(_razorEngine, projectInfo, entry);
                     break;
 
                 case DocumentKind.AsciiDoc:
-                    generator = new AsciiDocPageGenerator(entry);
+                    generator = new AsciiDocPageGenerator(_razorEngine, projectInfo, entry);
                     break;
 
                 default:
                     throw new NotImplementedException("Pages of kind '" + entry.Kind + "' are not yet implemented.");
             }
-
-            // Create and populate the model...
-            // TODO
 
             // Return what we hath wrought...
             return generator;

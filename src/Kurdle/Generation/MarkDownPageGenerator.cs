@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Kurdle.Services;
+﻿using System.IO;
+using CommonMark;
+using RazorEngine.Templating;
 
 namespace Kurdle.Generation
 {
     public class MarkDownPageGenerator : AbstractPageGenerator
     {
-        public MarkDownPageGenerator(DocumentEntry entry) : base(entry)
+        public MarkDownPageGenerator(IRazorEngineService razorEngine, IProjectInfo projectInfo, DocumentEntry entry)
+            : base(razorEngine, projectInfo, entry)
         {
+        }
+
+
+
+        protected override string GetPageContent(TextReader reader)
+        {
+            return CommonMarkConverter.Convert(reader.ReadToEnd());
         }
     }
 }

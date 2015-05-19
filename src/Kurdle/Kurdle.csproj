@@ -64,15 +64,14 @@
     <Compile Include="Generation\AsciiDocPageGenerator.cs" />
     <Compile Include="Generation\MarkDownPageGenerator.cs" />
     <Compile Include="Generation\PageGeneratorFactory.cs" />
-    <Compile Include="MetaData\DocumentMetaData.cs" />
+    <Compile Include="Generation\DocumentMetaData.cs" />
     <Compile Include="Misc\EmbeddedTemplateKey.cs" />
     <Compile Include="Misc\ProjectException.cs" />
-    <Compile Include="Models\BaseModel.cs" />
-    <Compile Include="Models\IndexModel.cs" />
+    <Compile Include="Generation\DocumentModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\DocumentEntry.cs" />
-    <Compile Include="Services\ProjectInfo.cs" />
+    <Compile Include="Generation\DocumentEntry.cs" />
+    <Compile Include="Generation\ProjectInfo.cs" />
     <Compile Include="Generation\SiteGenerator.cs" />
     <Compile Include="Misc\EmbeddedTemplateManager.cs" />
   </ItemGroup>
@@ -80,6 +79,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Templates\Layout.cshtml" />
+    <EmbeddedResource Include="Templates\Document.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,13 +1,13 @@
 ﻿
 
-namespace Kurdle.MetaData
+namespace Kurdle.Generation
 {
     public class DocumentMetaData
     {
         public DocumentMetaData()
         {
             // Set defaults
-            Template = "Article";
+            Template = "Document";
         }
 
         public string Template { get; set; }
