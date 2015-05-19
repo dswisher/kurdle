@@ -51,15 +51,22 @@ namespace Kurdle.Services
             {
                 var extension = Path.GetExtension(file.Name).Substring(1).ToLower();
 
+                DocumentEntry entry = null;
                 switch (extension)
                 {
                     case "md":
-                        _documents.Add(new DocumentEntry(DocumentKind.MarkDown, file));
+                        entry = new DocumentEntry(DocumentKind.MarkDown, file);
                         break;
 
                     case "txt":
-                        _documents.Add(new DocumentEntry(DocumentKind.AsciiDoc, file));
+                        entry = new DocumentEntry(DocumentKind.AsciiDoc, file);
                         break;
+                }
+
+                if (entry != null)
+                {
+                    _documents.Add(entry);
+                    entry.ScanHeader();
                 }
             }
 

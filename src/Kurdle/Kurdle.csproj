@@ -54,12 +54,17 @@
     <Reference Include="RazorEngine">
       <HintPath>..\packages\RazorEngine.3.7.0\lib\net45\RazorEngine.dll</HintPath>
     </Reference>
+    <Reference Include="YamlDotNet">
+      <HintPath>..\packages\YamlDotNet.3.5.1\lib\net35\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\GenerateCommand.cs" />
     <Compile Include="Generation\AbstractPageGenerator.cs" />
+    <Compile Include="Generation\AsciiDocPageGenerator.cs" />
     <Compile Include="Generation\MarkDownPageGenerator.cs" />
     <Compile Include="Generation\PageGeneratorFactory.cs" />
+    <Compile Include="MetaData\DocumentMetaData.cs" />
     <Compile Include="Misc\EmbeddedTemplateKey.cs" />
     <Compile Include="Misc\ProjectException.cs" />
     <Compile Include="Models\BaseModel.cs" />

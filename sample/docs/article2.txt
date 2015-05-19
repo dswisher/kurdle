@@ -1,2 +1,5 @@
+---
+title: Another Article
+---
 
 An AsciiDoc file (probably invalid).

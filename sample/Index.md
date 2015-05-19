@@ -1,4 +1,4 @@
 ---
-layout: Index
+template: Index
 title: Excess Kurtosis
 ---

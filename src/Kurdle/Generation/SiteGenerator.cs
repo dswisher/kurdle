@@ -55,50 +55,59 @@ namespace Kurdle.Generation
             IndexModel model = new IndexModel { SiteName = projectInfo.SiteName };
 
             // Generate the home page
-            if (!dryRun)
-            {
-                var file = GetFileInfo(projectInfo, "index.html");
+            //if (!dryRun)
+            //{
+            //    var file = GetFileInfo(projectInfo, "index.html");
 
-                using (var writer = file.CreateText())
-                {
-                    var result = _razorEngine.Run("Index", typeof(IndexModel), model);
+            //    using (var writer = file.CreateText())
+            //    {
+            //        var result = _razorEngine.Run("Index", typeof(IndexModel), model);
 
-                    writer.Write(result);
-                }
-            }
+            //        writer.Write(result);
+            //    }
+            //}
 
             // Generate all the documents...
-            if (!dryRun)
+            foreach (var doc in projectInfo.Documents)
             {
-                foreach (var doc in projectInfo.Documents)
-                {
-                    if (doc.Kind != DocumentKind.MarkDown)
-                    {
-                        continue;
-                    }
+                var generator = _pageGeneratorFactory.Create(doc);
 
-                    var file = GetFileInfo(projectInfo, Path.ChangeExtension(doc.Info.Name, ".html"));
-
-                    // TODO - only grab the innards - use layout to wrap everything
-
-                    using (var writer = file.CreateText())
-                    {
-                        using (var reader = doc.Info.OpenText())
-                        {
-                            CommonMark.CommonMarkConverter.Convert(reader, writer);
-                        }
-                    }
-                }
+                generator.Generate();
             }
+
+            //if (!dryRun)
+            //{
+            //    foreach (var doc in projectInfo.Documents)
+            //    {
+            //        var generator = _pageGeneratorFactory.Create(doc, dryRun);
+
+            //        if (doc.Kind != DocumentKind.MarkDown)
+            //        {
+            //            continue;
+            //        }
+
+            //        var file = GetFileInfo(projectInfo, Path.ChangeExtension(doc.Info.Name, ".html"));
+
+            //        // TODO - only grab the innards - use layout to wrap everything
+
+            //        using (var writer = file.CreateText())
+            //        {
+            //            using (var reader = doc.Info.OpenText())
+            //            {
+            //                CommonMark.CommonMarkConverter.Convert(reader, writer);
+            //            }
+            //        }
+            //    }
+            //}
         }
 
 
 
-        private FileInfo GetFileInfo(IProjectInfo projectInfo, string filePath)
-        {
-            var path = Path.Combine(projectInfo.OutputDirectory.FullName, filePath);
+        //private FileInfo GetFileInfo(IProjectInfo projectInfo, string filePath)
+        //{
+        //    var path = Path.Combine(projectInfo.OutputDirectory.FullName, filePath);
 
-            return new FileInfo(Path.GetFullPath(path));
-        }
+        //    return new FileInfo(Path.GetFullPath(path));
+        //}
     }
 }
