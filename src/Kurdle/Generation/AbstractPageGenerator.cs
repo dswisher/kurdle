@@ -3,24 +3,22 @@ using RazorEngine.Templating;
 
 namespace Kurdle.Generation
 {
-    public abstract class AbstractPageGenerator : IPageGenerator
+    public abstract class AbstractPageGenerator : AbstractFileProcessor
     {
         private readonly IRazorEngineService _razorEngine;
-        private readonly IProjectInfo _projectInfo;
-        protected readonly DocumentEntry _entry;
+
 
         protected AbstractPageGenerator(IRazorEngineService razorEngine, IProjectInfo projectInfo, DocumentEntry entry)
+            : base(projectInfo, entry)
         {
             _razorEngine = razorEngine;
-            _projectInfo = projectInfo;
-            _entry = entry;
         }
 
 
         protected abstract string GetPageContent(TextReader reader);
 
 
-        public void Generate(bool dryRun)
+        public override void Process(bool dryRun)
         {
             // Get the page-specific content...
             string pageContent;
@@ -45,49 +43,15 @@ namespace Kurdle.Generation
             // And write out.
             if (!dryRun)
             {
-                var dir = GetOutputDirectory();
+                MakeOutputDir();
 
-                MakeDir(dir);
-
-                var file = GetOutputPath(dir);
+                var file = GetOutputInfo(".html");
 
                 using (var writer = file.CreateText())
                 {
                     writer.Write(result);
                 }
             }
-        }
-
-
-
-        private void MakeDir(DirectoryInfo dir)
-        {
-            if (!dir.Exists)
-            {
-                MakeDir(dir.Parent);
-
-                dir.Create();
-            }
-        }
-
-
-
-        private DirectoryInfo GetOutputDirectory()
-        {
-            var subdir = Path.Combine(_projectInfo.OutputDirectory.FullName, _entry.SubDirectory);
-
-            return new DirectoryInfo(subdir);
-        }
-
-
-
-        private FileInfo GetOutputPath(DirectoryInfo outputDirectory)
-        {
-            var outputName = Path.ChangeExtension(_entry.Info.Name, ".html");
-            var path = Path.Combine(outputDirectory.FullName, outputName);
-            var file = new FileInfo(Path.GetFullPath(path));
-
-            return file;
         }
 
 

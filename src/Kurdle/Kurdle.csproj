@@ -60,10 +60,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\GenerateCommand.cs" />
+    <Compile Include="Generation\AbstractFileProcessor.cs" />
     <Compile Include="Generation\AbstractPageGenerator.cs" />
     <Compile Include="Generation\AsciiDocPageGenerator.cs" />
-    <Compile Include="Generation\CopyWorker.cs" />
-    <Compile Include="Generation\IPageGenerator.cs" />
+    <Compile Include="Generation\CopyFileProcessor.cs" />
+    <Compile Include="Generation\IFileProcessor.cs" />
     <Compile Include="Generation\MarkDownPageGenerator.cs" />
     <Compile Include="Generation\PageGeneratorFactory.cs" />
     <Compile Include="Generation\DocumentMetaData.cs" />

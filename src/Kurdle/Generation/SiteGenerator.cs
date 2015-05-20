@@ -39,7 +39,7 @@ namespace Kurdle.Generation
             {
                 var generator = _pageGeneratorFactory.Create(projectInfo, doc);
 
-                generator.Generate(dryRun);
+                generator.Process(dryRun);
             }
         }
     }
