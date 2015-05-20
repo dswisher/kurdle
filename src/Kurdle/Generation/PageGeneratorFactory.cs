@@ -8,7 +8,7 @@ namespace Kurdle.Generation
 {
     public interface IPageGeneratorFactory
     {
-        AbstractPageGenerator Create(IProjectInfo projectInfo, DocumentEntry entry);
+        IPageGenerator Create(IProjectInfo projectInfo, DocumentEntry entry);
     }
 
 
@@ -33,7 +33,7 @@ namespace Kurdle.Generation
 
 
 
-        public AbstractPageGenerator Create(IProjectInfo projectInfo, DocumentEntry entry)
+        public IPageGenerator Create(IProjectInfo projectInfo, DocumentEntry entry)
         {
             // Make sure the template is ready...
             if (!_compiledTemplates.Contains(entry.Template))
@@ -44,7 +44,7 @@ namespace Kurdle.Generation
             }
 
             // Construct the page generator itself...
-            AbstractPageGenerator generator;
+            IPageGenerator generator;
             switch (entry.Kind)
             {
                 case DocumentKind.MarkDown:
@@ -53,6 +53,10 @@ namespace Kurdle.Generation
 
                 case DocumentKind.AsciiDoc:
                     generator = new AsciiDocPageGenerator(_razorEngine, projectInfo, entry);
+                    break;
+
+                case DocumentKind.Script:
+                    generator = new CopyWorker(entry);
                     break;
 
                 default:

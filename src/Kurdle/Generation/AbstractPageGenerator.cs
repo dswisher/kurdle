@@ -3,7 +3,7 @@ using RazorEngine.Templating;
 
 namespace Kurdle.Generation
 {
-    public abstract class AbstractPageGenerator
+    public abstract class AbstractPageGenerator : IPageGenerator
     {
         private readonly IRazorEngineService _razorEngine;
         private readonly IProjectInfo _projectInfo;

@@ -5,6 +5,7 @@
 - Should bundle javascript (and perhaps css)
 - The relative path to the script directory should be part of DocumentModel
 - The relative path to the "main" image directory should be part of DocumentModel
+- Switch project.dat file to [YAML](http://yaml.org/)
 
 
 ## Other Markup ##

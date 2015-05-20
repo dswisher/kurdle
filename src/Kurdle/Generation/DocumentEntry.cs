@@ -5,7 +5,9 @@ namespace Kurdle.Generation
     public enum DocumentKind
     {
         MarkDown,
-        AsciiDoc
+        AsciiDoc,
+        Script,
+        Style
     }
 
 

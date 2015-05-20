@@ -67,11 +67,15 @@ namespace Kurdle.Generation
                         kind = DocumentKind.AsciiDoc;
                         break;
 
+                    case "js":
+                        kind = DocumentKind.Script;
+                        break;
+
                     default:
                         continue;
                 }
 
-                var entry = new DocumentEntry(kind, file, ScanHeader(file), path);
+                var entry = new DocumentEntry(kind, file, IsStatic(kind) ? DocumentMetaData.Empty : ScanHeader(file), path);
 
                 _documents.Add(entry);
             }
@@ -81,6 +85,21 @@ namespace Kurdle.Generation
                 var subpath = Path.Combine(path, subdir.Name);
 
                 ScanForDocuments(subdir, subpath);
+            }
+        }
+
+
+
+        private bool IsStatic(DocumentKind kind)
+        {
+            switch (kind)
+            {
+                case DocumentKind.Script:
+                case DocumentKind.Style:
+                    return true;
+
+                default:
+                    return false;
             }
         }
 
