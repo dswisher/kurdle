@@ -1,13 +1,22 @@
 
+## General ##
+
+- Add a `sync` command that will sync the output to Google Cloud Storage, etc.
+- Add a `serve` command that spins up a local web server for the output directory, and watches the input directories for changes
+- Add a link checker, either as a standalone command or an option during site generation
+
 ## Generator ##
 
 - Need to copy images, styles, etc.
 - Process .gitignore files to avoid dirs we don't want to see
 - Should (optionally) minify JS
-- Should bundle javascript (and perhaps css)
+- Allow custom (site-specific) Razor templates
+- Figure out how to use partial views in RazorEngine
+- Should minify javascript (and perhaps css?)
 - The relative path to the script directory should be part of DocumentModel
 - The relative path to the "main" image directory should be part of DocumentModel
 - Switch project.dat file to [YAML](http://yaml.org/)
+- Should bundle javascript files (and perhaps css)
 
 
 ## Other Markup ##

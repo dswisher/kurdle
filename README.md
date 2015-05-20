@@ -4,7 +4,19 @@
 
 A somewhat custom static web site (blog) generator.
 
-## Other libraries ##
+## Hosting ##
+
+There are many options for hosting a static web site. Here are
+some notes that might be helpful:
+
+- Google Cloud: [Configuring a Bucket as a Website](https://cloud.google.com/storage/docs/website-configuration)
+
+## Markdown Editors ##
+
+- Windows: [MarkdownPad](http://markdownpad.com/)
+- Linux: [retext](http://sourceforge.net/p/retext/home/ReText/) - `apt-get install retext`
+
+## Third Party libraries ##
 
 This tool would not be possible without a number of third party libraries:
 
@@ -17,6 +29,10 @@ This tool would not be possible without a number of third party libraries:
 
 - [Responsive Test Tool](http://mattkersley.com/responsive/)
 
+
+## Other Static Blogs ##
+
+- [Haacked.com](http://haacked.com/) ([github repo](https://github.com/haacked/haacked.com)) - uses Jekyll and GitHub pages
 
 ## Similar Tools ##
 
