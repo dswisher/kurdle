@@ -17,8 +17,16 @@ namespace Kurdle.Generation
         {
             if (!dryRun)
             {
+                var outputInfo = GetOutputInfo();
+
                 MakeOutputDir();
-                _entry.Info.CopyTo(GetOutputInfo().FullName);
+
+                if (outputInfo.Exists)
+                {
+                    outputInfo.Delete();
+                }
+
+                _entry.Info.CopyTo(outputInfo.FullName);
             }
         }
     }

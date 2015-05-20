@@ -7,32 +7,26 @@ namespace Kurdle.Generation
     {
         protected readonly IProjectInfo _projectInfo;
         protected readonly DocumentEntry _entry;
+        private readonly DirectoryInfo _outputDirectoryInfo;
 
 
         protected AbstractFileProcessor(IProjectInfo projectInfo, DocumentEntry entry)
         {
             _projectInfo = projectInfo;
             _entry = entry;
+
+            var subdir = Path.Combine(_projectInfo.OutputDirectory.FullName, _entry.SubDirectory);
+            _outputDirectoryInfo = new DirectoryInfo(subdir);
         }
 
 
         public abstract void Process(bool dryRun);
 
 
-        private DirectoryInfo GetOutputDirectory()
-        {
-            // TODO - build the output dir on construction and save it
-            var subdir = Path.Combine(_projectInfo.OutputDirectory.FullName, _entry.SubDirectory);
-
-            return new DirectoryInfo(subdir);
-        }
-
-
-
         protected FileInfo GetOutputInfo(string newExtension = null)
         {
             var outputName = (newExtension == null) ? _entry.Info.Name : Path.ChangeExtension(_entry.Info.Name, newExtension);
-            var path = Path.Combine(GetOutputDirectory().FullName, outputName);
+            var path = Path.Combine(_outputDirectoryInfo.FullName, outputName);
             var file = new FileInfo(Path.GetFullPath(path));
 
             return file;
@@ -42,7 +36,7 @@ namespace Kurdle.Generation
 
         protected void MakeOutputDir()
         {
-            MakeDir(GetOutputDirectory());
+            MakeDir(_outputDirectoryInfo);
         }
 
 
