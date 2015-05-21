@@ -71,6 +71,16 @@ namespace Kurdle.Generation
                         kind = DocumentKind.Script;
                         break;
 
+                    case "css":
+                        kind = DocumentKind.Style;
+                        break;
+
+                    case "gif":
+                    case "jpg":
+                    case "png":
+                        kind = DocumentKind.Image;
+                        break;
+
                     default:
                         continue;
                 }
@@ -96,6 +106,7 @@ namespace Kurdle.Generation
             {
                 case DocumentKind.Script:
                 case DocumentKind.Style:
+                case DocumentKind.Image:
                     return true;
 
                 default:

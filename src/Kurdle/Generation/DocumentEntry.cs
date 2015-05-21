@@ -7,7 +7,8 @@ namespace Kurdle.Generation
         MarkDown,
         AsciiDoc,
         Script,
-        Style
+        Style,
+        Image
     }
 
 

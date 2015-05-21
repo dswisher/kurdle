@@ -12,7 +12,6 @@
 - Should (optionally) minify JS
 - Allow custom (site-specific) Razor templates
 - Figure out how to use partial views in RazorEngine
-- Should minify javascript (and perhaps css?)
 - The relative path to the script directory should be part of DocumentModel
 - The relative path to the "main" image directory should be part of DocumentModel
 - Switch project.dat file to [YAML](http://yaml.org/)

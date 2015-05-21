@@ -55,7 +55,9 @@ namespace Kurdle.Generation
                     generator = new AsciiDocPageGenerator(_razorEngine, projectInfo, entry);
                     break;
 
+                case DocumentKind.Image:
                 case DocumentKind.Script:
+                case DocumentKind.Style:
                     generator = new CopyFileProcessor(projectInfo, entry);
                     break;
 
