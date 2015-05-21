@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Kurdle.Annotations;
 using Kurdle.Misc;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -23,6 +24,7 @@ namespace Kurdle.Generation
     public class ProjectInfo : IProjectInfo
     {
         private readonly List<DocumentEntry> _documents = new List<DocumentEntry>();
+        private readonly Deserializer _deserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention());
         private DirectoryInfo _root;
 
         public DirectoryInfo OutputDirectory { get; private set; }
@@ -156,11 +158,9 @@ namespace Kurdle.Generation
             }
 
             // Send the header through the YAML parser...
-            var deserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention());
-
             using (var reader = new StringReader(builder.ToString()))
             {
-                return deserializer.Deserialize<DocumentMetaData>(reader);
+                return _deserializer.Deserialize<DocumentMetaData>(reader);
             }
         }
 
@@ -170,43 +170,10 @@ namespace Kurdle.Generation
         {
             using (var reader = projectFile.OpenText())
             {
-                int lineNumber = 0;
-                string data;
-                while ((data = reader.ReadLine()) != null)
-                {
-                    lineNumber += 1;
+                var settings = _deserializer.Deserialize<Settings>(reader);
 
-                    data = data.Trim();
-
-                    if (data.Length == 0)
-                    {
-                        continue;
-                    }
-
-                    int pos = data.IndexOf(':');
-                    string name = null;
-                    string value = null;
-                    if (pos > 0)
-                    {
-                        name = data.Substring(0, pos).Trim().ToLower();
-                        value = data.Substring(pos + 1).Trim();
-                    }
-
-                    switch (name)
-                    {
-                        case "output":
-                            OutputDirectory = ParseDirectory(projectFile, value);
-                            break;
-
-                        case "sitename":
-                            SiteName = value;
-                            break;
-
-                        default:
-                            throw new ProjectException("Invalid project setting ({2}), line {0} of {1}.",
-                                lineNumber, projectFile.FullName, name ?? "[null]");
-                    }
-                }
+                SiteName = settings.SiteName;
+                OutputDirectory = ParseDirectory(projectFile, settings.Output);
             }
         }
 
@@ -281,6 +248,14 @@ namespace Kurdle.Generation
                 Console.WriteLine("   -> User file:    {0}", info.FullName);
                 ParseProjectInfo(info);
             }
+        }
+
+
+
+        public class Settings
+        {
+            public string Output { get; set; }
+            public string SiteName { get; set; }
         }
     }
 }

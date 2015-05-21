@@ -72,6 +72,7 @@
     <Compile Include="Misc\ProjectException.cs" />
     <Compile Include="Generation\DocumentModel.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Generation\DocumentEntry.cs" />
     <Compile Include="Generation\ProjectInfo.cs" />
