@@ -21,7 +21,7 @@ namespace Kurdle.Commands
 
         public void Execute()
         {
-            _projectInfo.Init();
+            _projectInfo.Init(Verbose);
             _siteGenerator.Generate(_projectInfo, DryRun);
         }
 
@@ -29,5 +29,9 @@ namespace Kurdle.Commands
         [NamedParameter(ShortName = "n")]
         [Description("Don’t actually generate anything, just parse and emit any errors.")]
         public bool DryRun { get; set; }
+
+        [NamedParameter(ShortName = "v")]
+        [Description("Print extra info about the generation.")]
+        public bool Verbose { get; set; }
     }
 }

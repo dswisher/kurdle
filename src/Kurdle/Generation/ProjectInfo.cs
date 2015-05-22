@@ -11,7 +11,7 @@ namespace Kurdle.Generation
 {
     public interface IProjectInfo
     {
-        void Init();
+        void Init(bool verbose);
 
         DirectoryInfo OutputDirectory { get; }
         string SiteName { get; }
@@ -26,13 +26,18 @@ namespace Kurdle.Generation
         private readonly Deserializer _deserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention());
         private DirectoryInfo _root;
 
+        public bool Verbose { get; private set; }
+
         public DirectoryInfo OutputDirectory { get; private set; }
+        public DirectoryInfo TemplateDirectory { get; private set; }
         public string SiteName { get; private set; }
         public IEnumerable<DocumentEntry> Documents { get { return _documents; } }
 
 
-        public void Init()
+        public void Init(bool verbose)
         {
+            Verbose = verbose;
+
             // Walk up the directory tree until we find the project info file
             FindAndParseProjectFile();
 
@@ -43,15 +48,23 @@ namespace Kurdle.Generation
             ScanForDocuments(_root, string.Empty, IgnoreList.Empty);
 
             // Dump out some info
-            Console.WriteLine();
-            Console.WriteLine("   -> Output: {0}", (OutputDirectory == null ? "(null)" : OutputDirectory.FullName));
+            if (Verbose)
+            {
+                Console.WriteLine();
+                Console.WriteLine("   -> Root Dir:     {0}", _root.FullName);
+                Console.WriteLine("   -> Template Dir: {0}", TemplateDirectory == null ? "(null)" : TemplateDirectory.FullName);
+                Console.WriteLine("   -> Output Dir:   {0}", OutputDirectory == null ? "(null)" : OutputDirectory.FullName);
+            }
         }
 
 
 
         private void ScanForDocuments(DirectoryInfo dir, string path, IgnoreList ignoreList)
         {
-            Console.WriteLine("...scanning {0}...", path);
+            if (Verbose)
+            {
+                Console.WriteLine("...scanning {0}...", path);
+            }
 
             foreach (var file in dir.GetFiles())
             {
@@ -192,6 +205,7 @@ namespace Kurdle.Generation
                 var settings = _deserializer.Deserialize<Settings>(reader);
 
                 SiteName = settings.SiteName;
+                TemplateDirectory = ParseDirectory(projectFile, settings.TemplateDir);
                 OutputDirectory = ParseDirectory(projectFile, settings.Output);
             }
         }
@@ -232,7 +246,6 @@ namespace Kurdle.Generation
                 {
                     ParseProjectInfo(info);
                     _root = info.Directory;
-                    Console.WriteLine("   -> Project file: {0}", info.FullName);
                     return;
                 }
 
@@ -275,6 +288,7 @@ namespace Kurdle.Generation
         {
             public string Output { get; set; }
             public string SiteName { get; set; }
+            public string TemplateDir { get; set; }
         }
     }
 }
