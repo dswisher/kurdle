@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Kurdle.Annotations;
 using Kurdle.Misc;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -41,7 +40,7 @@ namespace Kurdle.Generation
             FindAndParseUserFile();
 
             // Scan for all the document files
-            ScanForDocuments(_root, string.Empty);
+            ScanForDocuments(_root, string.Empty, IgnoreList.Empty);
 
             // Dump out some info
             Console.WriteLine();
@@ -50,12 +49,27 @@ namespace Kurdle.Generation
 
 
 
-        private void ScanForDocuments(DirectoryInfo dir, string path)
+        private void ScanForDocuments(DirectoryInfo dir, string path, IgnoreList ignoreList)
         {
             Console.WriteLine("...scanning {0}...", path);
 
             foreach (var file in dir.GetFiles())
             {
+                // TODO - scan for .gitignore first, in a separate loop?
+                // Special case - .gitignore
+                if (file.Name == ".gitignore")
+                {
+                    ignoreList = ignoreList.Parse(file);
+                    continue;
+                }
+
+                // Is this file ignored?
+                if (ignoreList.IsIgnored(file))
+                {
+                    continue;
+                }
+
+                // Handle the "normal" cases...
                 var extension = Path.GetExtension(file.Name).Substring(1).ToLower();
 
                 DocumentKind kind;
@@ -94,9 +108,14 @@ namespace Kurdle.Generation
 
             foreach (var subdir in dir.GetDirectories())
             {
+                if (ignoreList.IsIgnored(subdir))
+                {
+                    continue;
+                }
+
                 var subpath = Path.Combine(path, subdir.Name);
 
-                ScanForDocuments(subdir, subpath);
+                ScanForDocuments(subdir, subpath, ignoreList);
             }
         }
 

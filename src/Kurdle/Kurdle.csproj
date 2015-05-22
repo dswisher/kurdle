@@ -69,6 +69,7 @@
     <Compile Include="Generation\PageGeneratorFactory.cs" />
     <Compile Include="Generation\DocumentMetaData.cs" />
     <Compile Include="Misc\EmbeddedTemplateKey.cs" />
+    <Compile Include="Misc\IgnoreList.cs" />
     <Compile Include="Misc\ProjectException.cs" />
     <Compile Include="Generation\DocumentModel.cs" />
     <Compile Include="Program.cs" />

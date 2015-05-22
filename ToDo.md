@@ -8,7 +8,6 @@
 ## Generator ##
 
 - Need to copy images, styles, etc.
-- Process .gitignore files to avoid dirs we don't want to see
 - Should (optionally) minify JS
 - Allow custom (site-specific) Razor templates
 - Figure out how to use partial views in RazorEngine
