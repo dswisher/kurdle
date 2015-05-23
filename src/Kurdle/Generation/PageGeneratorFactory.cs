@@ -8,24 +8,26 @@ namespace Kurdle.Generation
 {
     public interface IPageGeneratorFactory
     {
-        IFileProcessor Create(IProjectInfo projectInfo, DocumentEntry entry);
+        IFileProcessor Create(DocumentEntry entry);
     }
 
 
 
     public class PageGeneratorFactory : IPageGeneratorFactory
     {
+        private readonly IProjectInfo _projectInfo;
         private readonly IRazorEngineService _razorEngine;
         private readonly HashSet<string> _compiledTemplates = new HashSet<string>();
 
 
-        public PageGeneratorFactory()
+        public PageGeneratorFactory(IProjectInfo projectInfo)
         {
+            _projectInfo = projectInfo;
             var config = new TemplateServiceConfiguration
             {
                 CachingProvider = new DefaultCachingProvider(t => { }),
                 DisableTempFileLocking = true,
-                TemplateManager = new EmbeddedTemplateManager("Kurdle.Templates")
+                TemplateManager = new EmbeddedTemplateManager("Kurdle.Templates", projectInfo.TemplateDirectory)
             };
 
             _razorEngine = RazorEngineService.Create(config);
@@ -33,7 +35,7 @@ namespace Kurdle.Generation
 
 
 
-        public IFileProcessor Create(IProjectInfo projectInfo, DocumentEntry entry)
+        public IFileProcessor Create(DocumentEntry entry)
         {
             // Make sure the template is ready...
             if (!_compiledTemplates.Contains(entry.Template))
@@ -48,17 +50,17 @@ namespace Kurdle.Generation
             switch (entry.Kind)
             {
                 case DocumentKind.MarkDown:
-                    generator = new MarkDownPageGenerator(_razorEngine, projectInfo, entry);
+                    generator = new MarkDownPageGenerator(_razorEngine, _projectInfo, entry);
                     break;
 
                 case DocumentKind.AsciiDoc:
-                    generator = new AsciiDocPageGenerator(_razorEngine, projectInfo, entry);
+                    generator = new AsciiDocPageGenerator(_razorEngine, _projectInfo, entry);
                     break;
 
                 case DocumentKind.Image:
                 case DocumentKind.Script:
                 case DocumentKind.Style:
-                    generator = new CopyFileProcessor(projectInfo, entry);
+                    generator = new CopyFileProcessor(_projectInfo, entry);
                     break;
 
                 default:

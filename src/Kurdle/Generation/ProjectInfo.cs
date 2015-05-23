@@ -14,6 +14,7 @@ namespace Kurdle.Generation
         void Init(bool verbose);
 
         DirectoryInfo OutputDirectory { get; }
+        DirectoryInfo TemplateDirectory { get; }
         string SiteName { get; }
         IEnumerable<DocumentEntry> Documents { get; }
     }

@@ -5,39 +5,42 @@ namespace Kurdle.Generation
 {
     public interface ISiteGenerator
     {
-        void Generate(IProjectInfo projectInfo, bool dryRun);
+        void Generate(bool dryRun);
     }
 
 
 
     public class SiteGenerator : ISiteGenerator
     {
+        private readonly IProjectInfo _projectInfo;
         private readonly IPageGeneratorFactory _pageGeneratorFactory;
 
 
-        public SiteGenerator(IPageGeneratorFactory pageGeneratorFactory)
+        public SiteGenerator(IProjectInfo projectInfo,
+                             Func<IProjectInfo, IPageGeneratorFactory> pageGeneratorFactory)
         {
-            _pageGeneratorFactory = pageGeneratorFactory;
+            _projectInfo = projectInfo;
+            _pageGeneratorFactory = pageGeneratorFactory(projectInfo);
         }
 
 
-        public void Generate(IProjectInfo projectInfo, bool dryRun)
+        public void Generate(bool dryRun)
         {
             Console.WriteLine("Generating site...");
 
             // Make sure the output directory exists
             if (!dryRun)
             {
-                if (!projectInfo.OutputDirectory.Exists)
+                if (!_projectInfo.OutputDirectory.Exists)
                 {
-                    projectInfo.OutputDirectory.Create();
+                    _projectInfo.OutputDirectory.Create();
                 }
             }
 
             // Generate all the documents...
-            foreach (var doc in projectInfo.Documents)
+            foreach (var doc in _projectInfo.Documents)
             {
-                var generator = _pageGeneratorFactory.Create(projectInfo, doc);
+                var generator = _pageGeneratorFactory.Create(doc);
 
                 generator.Process(dryRun);
             }

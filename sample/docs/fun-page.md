@@ -1,7 +1,6 @@
 ---
 title: An Article
 template: FunPage
-template: Document
 ---
 
 # A Fun Page #
