@@ -48,4 +48,6 @@ This tool would not be possible without a number of third party libraries:
 
 ## Links ##
 
+- [Responsive Design in 3 Steps](http://webdesignerwall.com/tutorials/responsive-design-in-3-steps)
+- [A Simple, Responsive, Mobile First Navigation](http://webdesign.tutsplus.com/articles/a-simple-responsive-mobile-first-navigation--webdesign-6074)
 - [Using CSS/HTML to Make a Responsive Website in 3 Easy Steps](http://css.dzone.com/articles/using-csshtml-make-responsive)
