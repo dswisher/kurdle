@@ -37,24 +37,19 @@ namespace Kurdle.Generation
 
         public IFileProcessor Create(DocumentEntry entry)
         {
-            // Make sure the template is ready...
-            if (!_compiledTemplates.Contains(entry.Template))
-            {
-                Console.WriteLine("...compiling '{0}' template...", entry.Template);
-                _razorEngine.Compile(entry.Template, typeof(DocumentModel));
-                _compiledTemplates.Add(entry.Template);
-            }
-
             // Construct the page generator itself...
             IFileProcessor generator;
+            string template = null;
             switch (entry.Kind)
             {
                 case DocumentKind.MarkDown:
                     generator = new MarkDownPageGenerator(_razorEngine, _projectInfo, entry);
+                    template = entry.Template;
                     break;
 
                 case DocumentKind.AsciiDoc:
                     generator = new AsciiDocPageGenerator(_razorEngine, _projectInfo, entry);
+                    template = entry.Template;
                     break;
 
                 case DocumentKind.Image:
@@ -65,6 +60,14 @@ namespace Kurdle.Generation
 
                 default:
                     throw new NotImplementedException("Pages of kind '" + entry.Kind + "' are not yet implemented.");
+            }
+
+            // Make sure the template is ready...
+            if ((template != null) && !_compiledTemplates.Contains(template))
+            {
+                Console.WriteLine("...compiling '{0}' template...", template);
+                _razorEngine.Compile(template, typeof(DocumentModel));
+                _compiledTemplates.Add(template);
             }
 
             // Return what we hath wrought...
