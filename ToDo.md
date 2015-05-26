@@ -7,11 +7,9 @@
 
 ## Generator ##
 
-- Need to copy images, styles, etc.
+- Need a way to create links
 - Should (optionally) minify JS
 - Figure out how to use partial views in RazorEngine
-- The relative path to the script directory should be part of DocumentModel
-- The relative path to the "main" image directory should be part of DocumentModel
 - Should bundle javascript files (and perhaps css)
 
 
