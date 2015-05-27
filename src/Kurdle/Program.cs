@@ -4,6 +4,7 @@ using System.Reflection;
 using Autofac;
 using Kurdle.Generation;
 using Kurdle.Misc;
+using Kurdle.Server;
 using Yaclops;
 
 
@@ -55,6 +56,7 @@ namespace Kurdle
             builder.RegisterType<ProjectInfo>().As<IProjectInfo>();
             builder.RegisterType<PageGeneratorFactory>().As<IPageGeneratorFactory>();
             builder.RegisterType<SiteGenerator>().As<ISiteGenerator>();
+            builder.RegisterType<SimpleServer>().As<ISimpleServer>();
 
             // Command-line specific stuff
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())

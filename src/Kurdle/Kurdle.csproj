@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\GenerateCommand.cs" />
+    <Compile Include="Commands\ServeCommand.cs" />
     <Compile Include="Generation\AbstractFileProcessor.cs" />
     <Compile Include="Generation\AbstractPageGenerator.cs" />
     <Compile Include="Generation\AsciiDocPageGenerator.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Generation\ProjectInfo.cs" />
     <Compile Include="Generation\SiteGenerator.cs" />
     <Compile Include="Misc\EmbeddedTemplateManager.cs" />
+    <Compile Include="Server\SimpleServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
