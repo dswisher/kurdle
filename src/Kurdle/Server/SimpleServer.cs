@@ -44,56 +44,65 @@ namespace Kurdle.Server
         // See http://stackoverflow.com/questions/16946389/stopping-and-restarting-httplistener
         public class XListener
         {
-            HttpListener listener;
+            private readonly HttpListener _listener;
+            private readonly string _prefix;
 
             public XListener(string prefix)
             {
-                listener = new HttpListener();
-                listener.Prefixes.Add(prefix);
+                _prefix = prefix;
+                _listener = new HttpListener();
+                _listener.Prefixes.Add(prefix);
             }
+
 
             public void StartListen()
             {
-                if (!listener.IsListening)
+                if (!_listener.IsListening)
                 {
-                    listener.Start();
+                    _listener.Start();
 
                     Task.Factory.StartNew(async () =>
                     {
-                        while (true) await Listen(listener);
+                        while (true) await Listen(_listener);
                     }, TaskCreationOptions.LongRunning);
 
-                    Console.WriteLine("Listener started");
+                    Console.WriteLine("Listener started: {0}", _prefix);
                 }
             }
+
 
             public void StopListen()
             {
-                if (listener.IsListening)
+                if (_listener.IsListening)
                 {
-                    listener.Stop();
+                    _listener.Stop();
                     Console.WriteLine("Listener stopped");
                 }
             }
+
 
             private async Task Listen(HttpListener l)
             {
                 try
                 {
                     var ctx = await l.GetContextAsync();
+                    var url = ctx.Request.Url;
+
+                    Console.WriteLine("Processing request: {0}", url);
 
                     var text = "Hello World";
                     var buffer = Encoding.UTF8.GetBytes(text);
 
                     using (var response = ctx.Response)
                     {
-                        ctx.Response.ContentLength64 = buffer.Length;
-                        ctx.Response.OutputStream.Write(buffer, 0, buffer.Length);
+                        response.ContentLength64 = buffer.Length;
+                        response.OutputStream.Write(buffer, 0, buffer.Length);
                     }
                 }
-                catch (HttpListenerException)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("screw you guys, I'm going home!");
+                    Console.WriteLine("Unhandled exception processing request:");
+                    Console.WriteLine(ex);
                 }
             }
         }
