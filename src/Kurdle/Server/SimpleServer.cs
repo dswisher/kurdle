@@ -25,7 +25,7 @@ namespace Kurdle.Server
 
             string url = "http://localhost:" + port + "/";
 
-            _listener = new XListener(url);
+            _listener = new XListener(url, ProcessRequest);
             _listener.StartListen();
 
             Console.WriteLine("Listening on port {0}...", port);
@@ -41,15 +41,32 @@ namespace Kurdle.Server
 
 
 
+        private void ProcessRequest(HttpListenerRequest request, HttpListenerResponse response)
+        {
+            var url = request.Url;
+
+            Console.WriteLine("Processing request: {0}", url);
+
+            var text = "Hello World";
+            var buffer = Encoding.UTF8.GetBytes(text);
+
+            response.ContentLength64 = buffer.Length;
+            response.OutputStream.Write(buffer, 0, buffer.Length);
+        }
+
+
+
         // See http://stackoverflow.com/questions/16946389/stopping-and-restarting-httplistener
         public class XListener
         {
             private readonly HttpListener _listener;
             private readonly string _prefix;
+            private readonly Action<HttpListenerRequest, HttpListenerResponse> _handler;
 
-            public XListener(string prefix)
+            public XListener(string prefix, Action<HttpListenerRequest, HttpListenerResponse> handler)
             {
                 _prefix = prefix;
+                _handler = handler;
                 _listener = new HttpListener();
                 _listener.Prefixes.Add(prefix);
             }
@@ -86,17 +103,11 @@ namespace Kurdle.Server
                 try
                 {
                     var ctx = await l.GetContextAsync();
-                    var url = ctx.Request.Url;
 
-                    Console.WriteLine("Processing request: {0}", url);
-
-                    var text = "Hello World";
-                    var buffer = Encoding.UTF8.GetBytes(text);
-
+                    var request = ctx.Request;
                     using (var response = ctx.Response)
                     {
-                        response.ContentLength64 = buffer.Length;
-                        response.OutputStream.Write(buffer, 0, buffer.Length);
+                        _handler(request, response);
                     }
                 }
                 catch (Exception ex)
