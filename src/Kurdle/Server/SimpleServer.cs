@@ -57,27 +57,23 @@ namespace Kurdle.Server
 
             var info = new FileInfo(localPath);
 
+            byte[] buffer;
             if (!info.Exists)
             {
-                // TODO - send 404
-                var text = "Hello World";
-                var buffer = Encoding.UTF8.GetBytes(text);
-
-                response.ContentLength64 = buffer.Length;
-                response.OutputStream.Write(buffer, 0, buffer.Length);
+                var text = string.Format("Could not find file: {0}", info.FullName);
+                buffer = Encoding.UTF8.GetBytes(text);
+                response.StatusCode = 400;
             }
             else
             {
                 // TODO - handle different file types (set mime type, etc)
                 // TODO - file encoding? Should we read as text?
 
-                byte[] buffer = File.ReadAllBytes(info.FullName);
-
-                // var buffer = Encoding.UTF8.GetBytes(text);
-
-                response.ContentLength64 = buffer.Length;
-                response.OutputStream.Write(buffer, 0, buffer.Length);
+                buffer = File.ReadAllBytes(info.FullName);
             }
+
+            response.ContentLength64 = buffer.Length;
+            response.OutputStream.Write(buffer, 0, buffer.Length);
         }
 
 
