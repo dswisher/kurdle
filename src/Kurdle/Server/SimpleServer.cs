@@ -43,15 +43,41 @@ namespace Kurdle.Server
 
         private void ProcessRequest(HttpListenerRequest request, HttpListenerResponse response)
         {
-            var url = request.Url;
+            var uriPath = request.Url.LocalPath.Substring(1);
 
-            Console.WriteLine("Processing request: {0}", url);
+            // TODO - better default document handling!
+            if (string.IsNullOrEmpty(uriPath))
+            {
+                uriPath = "index.html";
+            }
 
-            var text = "Hello World";
-            var buffer = Encoding.UTF8.GetBytes(text);
+            var localPath = Path.Combine(_rootDir.FullName, uriPath);
 
-            response.ContentLength64 = buffer.Length;
-            response.OutputStream.Write(buffer, 0, buffer.Length);
+            Console.WriteLine("Processing {0}, local path: {1}", request.Url, localPath);
+
+            var info = new FileInfo(localPath);
+
+            if (!info.Exists)
+            {
+                // TODO - send 404
+                var text = "Hello World";
+                var buffer = Encoding.UTF8.GetBytes(text);
+
+                response.ContentLength64 = buffer.Length;
+                response.OutputStream.Write(buffer, 0, buffer.Length);
+            }
+            else
+            {
+                // TODO - handle different file types (set mime type, etc)
+                // TODO - file encoding? Should we read as text?
+
+                byte[] buffer = File.ReadAllBytes(info.FullName);
+
+                // var buffer = Encoding.UTF8.GetBytes(text);
+
+                response.ContentLength64 = buffer.Length;
+                response.OutputStream.Write(buffer, 0, buffer.Length);
+            }
         }
 
 
