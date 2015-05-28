@@ -19,6 +19,7 @@ namespace Kurdle.Server
         private DirectoryInfo _rootDir;
 
 
+
         public void Start(DirectoryInfo rootDir, int port)
         {
             _rootDir = rootDir;
@@ -62,12 +63,13 @@ namespace Kurdle.Server
             {
                 var text = string.Format("Could not find file: {0}", info.FullName);
                 buffer = Encoding.UTF8.GetBytes(text);
-                response.StatusCode = 400;
+                response.StatusCode = 404;
             }
             else
             {
-                // TODO - handle different file types (set mime type, etc)
-                // TODO - file encoding? Should we read as text?
+                // TODO - how to determine content encoding...do we care?
+
+                response.ContentType = MimeTypeMap.GetMimeType(info.Extension);
 
                 buffer = File.ReadAllBytes(info.FullName);
             }
@@ -103,6 +105,7 @@ namespace Kurdle.Server
                     Task.Factory.StartNew(async () =>
                     {
                         while (true) await Listen(_listener);
+// ReSharper disable once FunctionNeverReturns
                     }, TaskCreationOptions.LongRunning);
 
                     Console.WriteLine("Listener started: {0}", _prefix);
@@ -135,7 +138,7 @@ namespace Kurdle.Server
                 catch (Exception ex)
                 {
                     Console.WriteLine("Unhandled exception processing request:");
-                    Console.WriteLine(ex);
+                    Console.WriteLine(ex.ToString());
                 }
             }
         }
