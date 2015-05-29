@@ -18,6 +18,8 @@ namespace Kurdle.Generation
         string SiteName { get; }
         IEnumerable<DocumentEntry> Documents { get; }
         DirectoryInfo Root { get; }
+
+        bool IsIgnored(string path);
     }
 
 
@@ -57,6 +59,14 @@ namespace Kurdle.Generation
                 Console.WriteLine("   -> Template Dir: {0}", TemplateDirectory == null ? "(null)" : TemplateDirectory.FullName);
                 Console.WriteLine("   -> Output Dir:   {0}", OutputDirectory == null ? "(null)" : OutputDirectory.FullName);
             }
+        }
+
+
+
+        public bool IsIgnored(string path)
+        {
+            // TODO!
+            return false;
         }
 
 

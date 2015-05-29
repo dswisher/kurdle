@@ -34,7 +34,7 @@ namespace Kurdle.Commands
             _server.Start(_projectInfo.OutputDirectory, Port);
 
             // Watch for changes in the source directory and regen
-            _changeMonitor.Start(_projectInfo);
+            _changeMonitor.Start(_projectInfo, x => Console.WriteLine("CHANGE! {0}", x.FullPath));
 
             // Wait for key press from the user...
             Console.WriteLine("Press [enter] to exit");

@@ -6,7 +6,7 @@ namespace Kurdle.Server
 {
     public interface IChangeMonitor : IDisposable
     {
-        void Start(IProjectInfo projectInfo);
+        void Start(IProjectInfo projectInfo, Action<ChangeMonitor.ChangeNotification> onChange);
         void Stop();
     }
 
@@ -16,9 +16,10 @@ namespace Kurdle.Server
     {
         private IProjectInfo _projectInfo;
         private FileSystemWatcher _watcher;
+        private Action<ChangeNotification> _onChange;
 
 
-        public void Start(IProjectInfo projectInfo)
+        public void Start(IProjectInfo projectInfo, Action<ChangeNotification> onChange)
         {
             if (_watcher != null)
             {
@@ -26,6 +27,7 @@ namespace Kurdle.Server
             }
 
             _projectInfo = projectInfo;
+            _onChange = onChange;
 
             _watcher = new FileSystemWatcher(_projectInfo.Root.FullName);
 
@@ -36,8 +38,6 @@ namespace Kurdle.Server
 
             _watcher.IncludeSubdirectories = true;
             _watcher.EnableRaisingEvents = true;
-
-            // TODO - need to ignore files in output dir!
         }
 
 
@@ -53,8 +53,16 @@ namespace Kurdle.Server
 
         private void OnChange(object sender, FileSystemEventArgs e)
         {
-            // TODO
-            Console.WriteLine("-> {0} {1}", e.ChangeType, e.FullPath);
+            var path = e.FullPath;
+
+            if (_projectInfo.IsIgnored(path))
+            {
+                return;
+            }
+
+            var notification = new ChangeNotification { FullPath = path };
+
+            _onChange(notification);
         }
 
 
@@ -63,9 +71,22 @@ namespace Kurdle.Server
         {
             if (_watcher != null)
             {
+                _watcher.Changed -= OnChange;
+                _watcher.Created -= OnChange;
+                _watcher.Deleted -= OnChange;
+                _watcher.Renamed -= OnChange;
+
                 _watcher.Dispose();
                 _watcher = null;
             }
+        }
+
+
+
+        public class ChangeNotification
+        {
+            // TODO - do we need change type or anything else?
+            public string FullPath { get; set; }
         }
     }
 }
