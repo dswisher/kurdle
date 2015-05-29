@@ -29,14 +29,13 @@ namespace Kurdle.Server
 
             _watcher = new FileSystemWatcher(_projectInfo.Root.FullName);
 
-            _watcher.IncludeSubdirectories = true;
-
             _watcher.Changed += OnChange;
             _watcher.Created += OnChange;
             _watcher.Deleted += OnChange;
             _watcher.Renamed += OnChange;
 
-            // watcher.EnableRaisingEvents = true;
+            _watcher.IncludeSubdirectories = true;
+            _watcher.EnableRaisingEvents = true;
 
             // TODO - need to ignore files in output dir!
         }
