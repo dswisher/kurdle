@@ -57,6 +57,7 @@ namespace Kurdle
             builder.RegisterType<PageGeneratorFactory>().As<IPageGeneratorFactory>();
             builder.RegisterType<SiteGenerator>().As<ISiteGenerator>();
             builder.RegisterType<SimpleServer>().As<ISimpleServer>();
+            builder.RegisterType<ChangeMonitor>().As<IChangeMonitor>();
 
             // Command-line specific stuff
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())

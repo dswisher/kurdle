@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Kurdle.Generation;
 using Kurdle.Server;
 using Yaclops;
@@ -16,11 +12,16 @@ namespace Kurdle.Commands
     {
         private readonly IProjectInfo _projectInfo;
         private readonly ISimpleServer _server;
+        private readonly IChangeMonitor _changeMonitor;
 
-        public ServeCommand(IProjectInfo projectInfo, ISimpleServer server)
+
+        public ServeCommand(IProjectInfo projectInfo,
+                            ISimpleServer server,
+                            IChangeMonitor changeMonitor)
         {
             _projectInfo = projectInfo;
             _server = server;
+            _changeMonitor = changeMonitor;
             Port = 8765;
         }
 
@@ -30,17 +31,17 @@ namespace Kurdle.Commands
             _projectInfo.Init(false);
 
             // Fire up the web server
-            // TODO - this should give back a context where we can cancel...
             _server.Start(_projectInfo.OutputDirectory, Port);
 
             // Watch for changes in the source directory and regen
-            // TODO
+            _changeMonitor.Start(_projectInfo);
 
             // Wait for key press from the user...
             Console.WriteLine("Press [enter] to exit");
             Console.ReadLine();
 
             // Shut things down...
+            _changeMonitor.Stop();
             _server.Stop();
         }
 

@@ -17,6 +17,7 @@ namespace Kurdle.Generation
         DirectoryInfo TemplateDirectory { get; }
         string SiteName { get; }
         IEnumerable<DocumentEntry> Documents { get; }
+        DirectoryInfo Root { get; }
     }
 
 
@@ -25,7 +26,6 @@ namespace Kurdle.Generation
     {
         private readonly List<DocumentEntry> _documents = new List<DocumentEntry>();
         private readonly Deserializer _deserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention());
-        private DirectoryInfo _root;
 
         public bool Verbose { get; private set; }
 
@@ -33,6 +33,7 @@ namespace Kurdle.Generation
         public DirectoryInfo TemplateDirectory { get; private set; }
         public string SiteName { get; private set; }
         public IEnumerable<DocumentEntry> Documents { get { return _documents; } }
+        public DirectoryInfo Root { get; private set; }
 
 
         public void Init(bool verbose)
@@ -46,13 +47,13 @@ namespace Kurdle.Generation
             FindAndParseUserFile();
 
             // Scan for all the document files
-            ScanForDocuments(_root, string.Empty, IgnoreList.Empty);
+            ScanForDocuments(Root, string.Empty, IgnoreList.Empty);
 
             // Dump out some info
             if (Verbose)
             {
                 Console.WriteLine();
-                Console.WriteLine("   -> Root Dir:     {0}", _root.FullName);
+                Console.WriteLine("   -> Root Dir:     {0}", Root.FullName);
                 Console.WriteLine("   -> Template Dir: {0}", TemplateDirectory == null ? "(null)" : TemplateDirectory.FullName);
                 Console.WriteLine("   -> Output Dir:   {0}", OutputDirectory == null ? "(null)" : OutputDirectory.FullName);
             }
@@ -246,7 +247,7 @@ namespace Kurdle.Generation
                 if (info != null)
                 {
                     ParseProjectInfo(info);
-                    _root = info.Directory;
+                    Root = info.Directory;
                     return;
                 }
 
@@ -272,7 +273,7 @@ namespace Kurdle.Generation
 
         private void FindAndParseUserFile()
         {
-            var info = _root.GetFiles("project.user").FirstOrDefault();
+            var info = Root.GetFiles("project.user").FirstOrDefault();
 
             // TODO - search for other names?
 
