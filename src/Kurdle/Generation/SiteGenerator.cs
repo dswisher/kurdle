@@ -5,7 +5,7 @@ namespace Kurdle.Generation
 {
     public interface ISiteGenerator
     {
-        void Generate(bool dryRun);
+        void Generate(bool dryRun = false);
     }
 
 

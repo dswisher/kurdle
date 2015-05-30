@@ -65,8 +65,8 @@ namespace Kurdle.Generation
 
         public bool IsIgnored(string path)
         {
-            // TODO!
-            return false;
+            // TODO! This is a hack!
+            return path.Contains(@"\output\");
         }
 
 

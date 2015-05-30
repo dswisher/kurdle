@@ -60,7 +60,9 @@ namespace Kurdle.Server
                 return;
             }
 
-            var notification = new ChangeNotification { FullPath = path };
+            var notification = new ChangeNotification { FullPath = path, ChangeType = e.ChangeType };
+
+            // Console.WriteLine("-> Change: {0}", path);
 
             _onChange(notification);
         }
@@ -85,7 +87,7 @@ namespace Kurdle.Server
 
         public class ChangeNotification
         {
-            // TODO - do we need change type or anything else?
+            public WatcherChangeTypes ChangeType { get; set; }
             public string FullPath { get; set; }
         }
     }

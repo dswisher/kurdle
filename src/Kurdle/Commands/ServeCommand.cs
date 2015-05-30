@@ -12,16 +12,16 @@ namespace Kurdle.Commands
     {
         private readonly IProjectInfo _projectInfo;
         private readonly ISimpleServer _server;
-        private readonly IChangeMonitor _changeMonitor;
+        private readonly IAutoGenerator _autoGenerator;
 
 
         public ServeCommand(IProjectInfo projectInfo,
                             ISimpleServer server,
-                            IChangeMonitor changeMonitor)
+                            IAutoGenerator autoGenerator)
         {
             _projectInfo = projectInfo;
             _server = server;
-            _changeMonitor = changeMonitor;
+            _autoGenerator = autoGenerator;
             Port = 8765;
         }
 
@@ -34,14 +34,14 @@ namespace Kurdle.Commands
             _server.Start(_projectInfo.OutputDirectory, Port);
 
             // Watch for changes in the source directory and regen
-            _changeMonitor.Start(_projectInfo, x => Console.WriteLine("CHANGE! {0}", x.FullPath));
+            _autoGenerator.Watch(_projectInfo, Beep);
 
             // Wait for key press from the user...
             Console.WriteLine("Press [enter] to exit");
             Console.ReadLine();
 
             // Shut things down...
-            _changeMonitor.Stop();
+            _autoGenerator.Stop();
             _server.Stop();
         }
 
@@ -49,5 +49,11 @@ namespace Kurdle.Commands
         [NamedParameter(ShortName = "p")]
         [Description("The port on which to listen. The default is 8765.")]
         public int Port { get; set; }
+
+
+        
+        [NamedParameter(ShortName = "b")]
+        [Description("Make a short been when generation completes.")]
+        public bool Beep { get; set; }
     }
 }
