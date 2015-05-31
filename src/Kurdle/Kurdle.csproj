@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Commands\GenerateCommand.cs" />
     <Compile Include="Commands\ServeCommand.cs" />
+    <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="Generation\AbstractFileProcessor.cs" />
     <Compile Include="Generation\AbstractPageGenerator.cs" />
     <Compile Include="Generation\AsciiDocPageGenerator.cs" />
