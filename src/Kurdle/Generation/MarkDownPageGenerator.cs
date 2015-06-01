@@ -17,6 +17,10 @@ namespace Kurdle.Generation
 
         protected override string GetPageContent(TextReader reader)
         {
+            const string wrapper = "faux-wrapper";
+            const string wrapperStart = "<" + wrapper + ">";
+            const string wrapperEnd = "</" + wrapper + ">";
+
             // Process markdown to HTML...
             var rawContent = CommonMarkConverter.Convert(reader.ReadToEnd());
 
@@ -25,7 +29,7 @@ namespace Kurdle.Generation
 
             try
             {
-                xml.LoadXml("<body>" + rawContent + "</body>");
+                xml.LoadXml(wrapperStart + rawContent + wrapperEnd);
             }
             catch (Exception)
             {
@@ -38,7 +42,8 @@ namespace Kurdle.Generation
 
             // TODO - post processing
 
-            var content = xml.SelectSingleNode("body").InnerXml;
+            // ReSharper disable once PossibleNullReferenceException
+            var content = xml.SelectSingleNode(wrapper).InnerXml;
 
             // Return what we've got...
             return content;
