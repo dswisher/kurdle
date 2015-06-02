@@ -5,9 +5,6 @@
 - Add a `serve` command that spins up a local web server for the output directory, and watches the input directories for changes
 - Add a link checker, either as a standalone command or an option during site generation
 
-## Serve ##
-
-- Serve should open a browser (perhaps optionally)
 
 ## Generator ##
 

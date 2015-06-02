@@ -36,6 +36,12 @@ namespace Kurdle.Commands
             // Watch for changes in the source directory and regen
             _autoGenerator.Watch(_projectInfo, Beep);
 
+            // If they asked for it, open a web browser...
+            if (OpenBrowser)
+            {
+                System.Diagnostics.Process.Start(_server.Url);
+            }
+
             // Wait for key press from the user...
             Console.WriteLine("Press [enter] to exit");
             Console.ReadLine();
@@ -55,5 +61,10 @@ namespace Kurdle.Commands
         [NamedParameter(ShortName = "b")]
         [Description("Make a short been when generation completes.")]
         public bool Beep { get; set; }
+
+
+        [NamedParameter(ShortName = "w")]
+        [Description("Open a web browser.")]
+        public bool OpenBrowser { get; set; }
     }
 }

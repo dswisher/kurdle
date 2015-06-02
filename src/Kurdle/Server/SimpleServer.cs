@@ -10,6 +10,8 @@ namespace Kurdle.Server
     {
         void Start(DirectoryInfo rootDir, int port);
         void Stop();
+
+        string Url { get; }
     }
 
 
@@ -24,14 +26,16 @@ namespace Kurdle.Server
         {
             _rootDir = rootDir;
 
-            string url = "http://localhost:" + port + "/";
+            Url = "http://localhost:" + port + "/";
 
-            _listener = new XListener(url, ProcessRequest);
+            _listener = new XListener(Url, ProcessRequest);
             _listener.StartListen();
 
             Console.WriteLine("Listening on port {0}...", port);
         }
 
+
+        public string Url { get; private set; }
 
 
         public void Stop()
