@@ -1,5 +1,6 @@
 ---
 title: An Article
+slug: article1
 ---
 
 ## An Article ##

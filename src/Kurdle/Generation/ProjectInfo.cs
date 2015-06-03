@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Kurdle.Misc;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -202,9 +203,17 @@ namespace Kurdle.Generation
             }
 
             // Send the header through the YAML parser...
-            using (var reader = new StringReader(builder.ToString()))
+            try
             {
-                return _deserializer.Deserialize<DocumentMetaData>(reader);
+                using (var reader = new StringReader(builder.ToString()))
+                {
+                    return _deserializer.Deserialize<DocumentMetaData>(reader);
+                }
+            }
+            catch (YamlException ex)
+            {
+                Exception e = ex.InnerException ?? ex;
+                throw new ProjectException("Invalid YAML in header of {0}: {1}", info.Name, e.Message);
             }
         }
 

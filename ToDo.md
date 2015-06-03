@@ -7,7 +7,7 @@
 
 ## Generator ##
 
-- Need a way to create links
+- Need a way to create links using slugs instead of file paths (during post-processing)
 - Should (optionally) minify JS
 - Figure out how to use partial views in RazorEngine
 - Should bundle javascript files (and perhaps css)
