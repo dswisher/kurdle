@@ -13,22 +13,29 @@ namespace Kurdle.Commands
         private readonly IProjectInfo _projectInfo;
         private readonly ISimpleServer _server;
         private readonly IAutoGenerator _autoGenerator;
+        private readonly Func<IProjectInfo, ISiteGenerator> _siteGenerator;
 
 
         public ServeCommand(IProjectInfo projectInfo,
                             ISimpleServer server,
-                            IAutoGenerator autoGenerator)
+                            IAutoGenerator autoGenerator,
+                            Func<IProjectInfo, ISiteGenerator> siteGenerator)
         {
             _projectInfo = projectInfo;
             _server = server;
             _autoGenerator = autoGenerator;
+            _siteGenerator = siteGenerator;
             Port = 8765;
         }
 
 
         public void Execute()
         {
+            // Parse the project info...
             _projectInfo.Init(false);
+
+            // Make sure the site is up to date...
+            _siteGenerator(_projectInfo).Generate();
 
             // Fire up the web server
             _server.Start(_projectInfo.OutputDirectory, Port);
