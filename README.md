@@ -30,6 +30,13 @@ This tool would not be possible without a number of third party libraries:
 - [Responsive Test Tool](http://mattkersley.com/responsive/)
 
 
+## Graphics? ##
+
+- [Graphviz](http://www.graphviz.org/) - includes `dot`, for rendering graphs
+- [Mermaid](https://github.com/knsv/mermaid) - markdown for flowcharts
+- [ditaa](http://ditaa.sourceforge.net/) - ASCII diagrams to PNG
+
+
 ## Other Static Blogs ##
 
 - [Haacked.com](http://haacked.com/) ([github repo](https://github.com/haacked/haacked.com)) - uses Jekyll and GitHub pages
