@@ -1,0 +1,1 @@
+ .\src\SampleMaker\bin\Debug\SampleMaker.exe big-sample %*

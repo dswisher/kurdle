@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kurdle", "Kurdle\Kurdle.csproj", "{6866303D-2F74-44D4-8CF2-1DC3A6414862}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleMaker", "SampleMaker\SampleMaker.csproj", "{74FC4288-D16D-4248-AFBB-23D3ABD00283}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6866303D-2F74-44D4-8CF2-1DC3A6414862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6866303D-2F74-44D4-8CF2-1DC3A6414862}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6866303D-2F74-44D4-8CF2-1DC3A6414862}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74FC4288-D16D-4248-AFBB-23D3ABD00283}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74FC4288-D16D-4248-AFBB-23D3ABD00283}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74FC4288-D16D-4248-AFBB-23D3ABD00283}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74FC4288-D16D-4248-AFBB-23D3ABD00283}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
