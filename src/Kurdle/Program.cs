@@ -24,6 +24,10 @@ namespace Kurdle
             {
                 Console.WriteLine(ex.Message);
             }
+            catch (KurdleException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             catch (Exception ex)
             {
                 Console.WriteLine("Unhandled exception in main.");

@@ -11,8 +11,9 @@ namespace Kurdle.Commands
         {
             Options options = new Options(this);
 
-            Console.WriteLine("Source:      {0}", options.Source ?? "n/a");
-            Console.WriteLine("Destination: {0}", options.Destination ?? "n/a");
+            Console.WriteLine("{0}: {1}", Options.SourceName, options.Source ?? "n/a");
+            Console.WriteLine("{0}: {1}", Options.DestinationName, options.Destination ?? "n/a");
+            Console.WriteLine("name: {0}", options.Get("name") ?? "n/a");
         }
     }
 }
