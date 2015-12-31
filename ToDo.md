@@ -1,19 +1,10 @@
 
 ## General ##
 
-- Add a `sync` command that will sync the output to Google Cloud Storage, etc.
 - Add a link checker, either as a standalone command or an option during site generation
 
 
 ## Generator ##
 
-- Need a way to create links using slugs instead of file paths (during post-processing)
-- Should (optionally) minify JS
-- Figure out how to use partial views in RazorEngine
-- Should bundle javascript files (and perhaps css)
+- Make front-matter parser pluggable, like [Hugo](https://gohugo.io/content/front-matter/), so [TOML](https://github.com/toml-lang/toml) could be used, if desired.
 
-
-## Other Markup ##
-
-- [AsciiDoc](http://www.methods.co.nz/asciidoc/)?
-- Look at the [lightweight markup language](https://en.wikipedia.org/wiki/Lightweight_markup_language) page on Wikipedia for ideas

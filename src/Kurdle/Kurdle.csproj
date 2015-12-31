@@ -61,7 +61,10 @@
     <Compile Include="Commands\ServeCommand.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="KurdleException.cs" />
+    <Compile Include="Misc\ExcludeList.cs" />
+    <Compile Include="Model\Page.cs" />
     <Compile Include="Model\Site.cs" />
+    <Compile Include="Model\StaticFile.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
