@@ -1,0 +1,305 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Yaclops</name>
+    </assembly>
+    <members>
+        <member name="T:Yaclops.Attributes.LongNameAttribute">
+            <summary>
+            Decorate a class or property with a long name
+            </summary>
+        </member>
+        <member name="M:Yaclops.Attributes.LongNameAttribute.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="name">The long name</param>
+        </member>
+        <member name="T:Yaclops.Attributes.NamedParameterAttribute">
+            <summary>
+            Mark a property as a named command-line parameter.
+            </summary>
+        </member>
+        <member name="P:Yaclops.Attributes.NamedParameterAttribute.ShortName">
+            <summary>
+            The short name for the parameter.
+            </summary>
+        </member>
+        <member name="P:Yaclops.Attributes.NamedParameterAttribute.LongName">
+            <summary>
+            The long name for the parameter. The default is the decamel of the property name.
+            </summary>
+        </member>
+        <member name="T:Yaclops.Attributes.PositionalParameterAttribute">
+            <summary>
+            Mark a property as a positional command-line parameter
+            </summary>
+        </member>
+        <member name="T:Yaclops.Attributes.ShortNameAttribute">
+            <summary>
+            Decorate a property with a shore name
+            </summary>
+        </member>
+        <member name="M:Yaclops.Attributes.ShortNameAttribute.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="name">The short name</param>
+        </member>
+        <member name="T:Yaclops.Attributes.SummaryAttribute">
+            <summary>
+            Used to decorate a subcommand with a summary.
+            </summary>
+        </member>
+        <member name="M:Yaclops.Attributes.SummaryAttribute.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="summary">The summary of the command.</param>
+        </member>
+        <member name="P:Yaclops.Attributes.SummaryAttribute.Summary">
+            <summary>
+            The summary.
+            </summary>
+        </member>
+        <member name="T:Yaclops.CommandLineParser`1">
+            <summary>
+            Parse a command line
+            </summary>
+        </member>
+        <member name="M:Yaclops.CommandLineParser`1.#ctor(Yaclops.CommandLineParserSettings{`0})">
+            <summary>
+            Constructor
+            </summary>
+            <remarks>
+            Commands can be added using the AddCommand or AddType methods.
+            </remarks>
+            <param name="settings">Additional settings for the parser</param>
+        </member>
+        <member name="M:Yaclops.CommandLineParser`1.#ctor(System.Collections.Generic.IEnumerable{`0},Yaclops.CommandLineParserSettings{`0})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="commands">List of command objects to reflect</param>
+            /// <param name="settings">Additional settings for the parser</param>
+        </member>
+        <member name="M:Yaclops.CommandLineParser`1.#ctor(System.Collections.Generic.IEnumerable{System.Type},System.Func{System.Type,`0},Yaclops.CommandLineParserSettings{`0})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="commandTypes">List of command types on which to reflect</param>
+            <param name="factory">A factory that can be used to create objects of the various command types</param>
+            <param name="settings">Additional settings for the parser</param>
+        </member>
+        <member name="M:Yaclops.CommandLineParser`1.AddCommand(`0)">
+            <summary>
+            Add a single command object to the parser's list of known commands.
+            </summary>
+            <param name="command">The command to add.</param>
+        </member>
+        <member name="M:Yaclops.CommandLineParser`1.AddCommands(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Add multiple command objects to the parser's list of known commands.
+            </summary>
+            <param name="commands"></param>
+        </member>
+        <member name="M:Yaclops.CommandLineParser`1.AddType(System.Type,System.Func{`0})">
+            <summary>
+            Add a type to the parser's list of known commands.
+            </summary>
+            <param name="commandType">The type to add.</param>
+            <param name="factory">A factory to create the command object, if parsed.</param>
+        </member>
+        <member name="M:Yaclops.CommandLineParser`1.AddTypes(System.Collections.Generic.IEnumerable{System.Type},System.Func{System.Type,`0})">
+            <summary>
+            Add a set of types to the parser's list of known commands.
+            </summary>
+            <param name="commandTypes">The list of types to add.</param>
+            <param name="factory">A factory to create the command objects, if parsed.</param>
+        </member>
+        <member name="M:Yaclops.CommandLineParser`1.AddGlobalOptions``1(``0)">
+            <summary>
+            Add global options
+            </summary>
+            <remarks>
+            This can be called multiple times with multiple objects, and their options are combined.
+            </remarks>
+            <param name="rootOptions"></param>
+        </member>
+        <member name="M:Yaclops.CommandLineParser`1.Parse(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Parse the given command line.
+            </summary>
+            <param name="args">The list of arguments passed into the program.</param>
+            <returns>The parsed command</returns>
+        </member>
+        <member name="M:Yaclops.CommandLineParser`1.Parse(System.String)">
+            <summary>
+            Parse the given command line.
+            </summary>
+            <param name="input">The arguments passed into the program.</param>
+            <returns>The parsed command</returns>
+        </member>
+        <member name="T:Yaclops.CommandLineParser">
+            <summary>
+            A command line parser using the built-in ISubCommand.
+            </summary>
+        </member>
+        <member name="M:Yaclops.CommandLineParser.#ctor(Yaclops.CommandLineParserSettings{Yaclops.ISubCommand})">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="settings">Optional settings for the parser.</param>
+        </member>
+        <member name="M:Yaclops.CommandLineParser.#ctor(System.Collections.Generic.IEnumerable{Yaclops.ISubCommand},Yaclops.CommandLineParserSettings{Yaclops.ISubCommand})">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="commands">A list of command objects to add to the parser.</param>
+            <param name="settings">Optional settings for the parser.</param>
+        </member>
+        <member name="T:Yaclops.CommandLineParserException">
+            <summary>
+            An error occurred during command line parsing.
+            </summary>
+        </member>
+        <member name="M:Yaclops.CommandLineParserException.#ctor(System.String,System.Object[])">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:Yaclops.CommandLineParserSettings`1">
+            <summary>
+            Settings that alter the default behavior of the parser.
+            </summary>
+            <typeparam name="T">The type (usually an interface) of the commands generated by the parser.</typeparam>
+        </member>
+        <member name="T:Yaclops.GlobalParserSettings">
+            <summary>
+            Settings that alter the default behavior of the parser, but do not depend on the command type.
+            </summary>
+        </member>
+        <member name="M:Yaclops.GlobalParserSettings.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:Yaclops.GlobalParserSettings.HelpVerb">
+            <summary>
+            The verb that indicates help is desired. Defaults to "help".
+            </summary>
+        </member>
+        <member name="P:Yaclops.GlobalParserSettings.HelpFlags">
+            <summary>
+            List of strings that indicate help is desired. Defaults to -h, -? and --help.
+            </summary>
+        </member>
+        <member name="P:Yaclops.GlobalParserSettings.EnableYaclopsCommands">
+            <summary>
+            Enable (hidden) internal Yaclops command used for debugging.
+            </summary>
+        </member>
+        <member name="P:Yaclops.GlobalParserSettings.ProgramName">
+            <summary>
+            The name of the program. The default is the executable name.
+            </summary>
+        </member>
+        <member name="M:Yaclops.CommandLineParserSettings`1.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:Yaclops.CommandLineParserSettings`1.NullCommand">
+            <summary>
+            A func that returns the command that is returned when help or another internal command is parsed.
+            </summary>
+        </member>
+        <member name="T:Yaclops.ISubCommand">
+            <summary>
+            The interface that a subcommand must implement.
+            </summary>
+        </member>
+        <member name="M:Yaclops.ISubCommand.Execute">
+            <summary>
+            Execute the command.
+            </summary>
+        </member>
+        <member name="T:Yaclops.DocumentModel.MarkLeft">
+            <summary>
+            Simplistic implementation of a markdown-like language for text formatting
+            </summary>
+        </member>
+        <member name="T:Yaclops.GlobalParser">
+            <summary>
+            Command line parser that just parses some global options - not subcommands.
+            </summary>
+        </member>
+        <member name="M:Yaclops.GlobalParser.#ctor(Yaclops.GlobalParserSettings)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="settings">Settings that alter the behavior of the parser</param>
+        </member>
+        <member name="M:Yaclops.GlobalParser.AddGlobalOptions``1(``0)">
+            <summary>
+            Add global options
+            </summary>
+            <remarks>
+            This can be called multiple times with multiple objects, and their options are combined.
+            </remarks>
+            <param name="rootOptions"></param>
+        </member>
+        <member name="M:Yaclops.GlobalParser.Parse(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Parse the given command line.
+            </summary>
+            <param name="args">The list of arguments passed into the program.</param>
+            <returns>The parsed command</returns>
+        </member>
+        <member name="M:Yaclops.GlobalParser.Parse(System.String)">
+            <summary>
+            Parse the given command line.
+            </summary>
+            <param name="input">The arguments passed into the program.</param>
+        </member>
+        <member name="T:Yaclops.ParserBuilder`1">
+            <summary>
+            Fluenty interface to assist with setting up parsers.
+            </summary>
+            <typeparam name="T">The base type/interface for all the commands.</typeparam>
+        </member>
+        <member name="M:Yaclops.ParserBuilder`1.FromCommands(System.Reflection.Assembly[])">
+            <summary>
+            Start building a parser by scanning one or more assemblies for command objects.
+            </summary>
+            <param name="assemblies">The assemblies to scan.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Yaclops.ParserBuilder`1.WithFactory(System.Func{System.Type,`0})">
+            <summary>
+            Set the factory to use to construct instances.
+            </summary>
+            <param name="factory">The factory</param>
+            <returns>The builder, to keep the fluentness alive</returns>
+        </member>
+        <member name="M:Yaclops.ParserBuilder`1.WithGlobals(System.Object)">
+            <summary>
+            Add global parameters to the parser
+            </summary>
+            <param name="globals">An object contain global parameters</param>
+            <returns>The builder, to keep the fluentness alive</returns>
+        </member>
+        <member name="M:Yaclops.ParserBuilder`1.WithSettings(Yaclops.CommandLineParserSettings{`0})">
+            <summary>
+            Set the settings that are used to alter the default behavior of the parser.
+            </summary>
+            <param name="settings">The settings</param>
+            <returns>The builder, to keep the fluentness alive</returns>
+        </member>
+        <member name="P:Yaclops.ParserBuilder`1.Parser">
+            <summary>
+            Get the resulting parser
+            </summary>
+        </member>
+    </members>
+</doc>
