@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Yaclops;
 using Yaclops.Attributes;
 
@@ -9,7 +10,15 @@ namespace Kurdle.Commands
     {
         public void Execute()
         {
-            Console.WriteLine("Clean is not yet implemented.");
+            Options options = new Options(this);
+
+            var dest = new DirectoryInfo(options.Destination);
+
+            if (dest.Exists)
+            {
+                Console.WriteLine("Removing {0}", dest.FullName);
+                dest.Delete(true);
+            }
         }
     }
 }
