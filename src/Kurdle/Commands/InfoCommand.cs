@@ -13,6 +13,7 @@ namespace Kurdle.Commands
 
             Console.WriteLine("{0}: {1}", Options.SourceName, options.Source ?? "n/a");
             Console.WriteLine("{0}: {1}", Options.DestinationName, options.Destination ?? "n/a");
+            Console.WriteLine("{0}: {1}", Options.VerboseName, options.Verbose);
             Console.WriteLine("name: {0}", options.Get("name") ?? "n/a");
         }
     }

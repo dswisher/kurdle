@@ -45,8 +45,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Yaclops">
-      <HintPath>..\packages\Yaclops.0.10.0-alpha\lib\net45\Yaclops.dll</HintPath>
+    <Reference Include="Yaclops, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Yaclops.0.11.0-alpha\lib\net45\Yaclops.dll</HintPath>
     </Reference>
     <Reference Include="YamlDotNet">
       <HintPath>..\packages\YamlDotNet.3.7.0\lib\net35\YamlDotNet.dll</HintPath>
@@ -60,6 +61,7 @@
     <Compile Include="Commands\ServeCommand.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="KurdleException.cs" />
+    <Compile Include="Model\Site.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

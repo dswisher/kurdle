@@ -15,6 +15,7 @@ namespace Kurdle
 
         public const string SourceName = "source";
         public const string DestinationName = "destination";
+        public const string VerboseName = "verbose";
 
 
         public Options(AbstractBuildCommand command)
@@ -38,6 +39,7 @@ namespace Kurdle
             // Override the config file with things explicitly set on the command line
             SetString(SourceName, command.SourceDir);
             SetString(DestinationName, command.DestinationDir);
+            SetBool(VerboseName, command.Verbose);
 
             // If source and dest are not yet set, do so now.
             if (string.IsNullOrWhiteSpace(Source))
@@ -54,13 +56,24 @@ namespace Kurdle
 
         public string Source
         {
-            get { return GetString(SourceName); }
+            get { return (string)Get(SourceName); }
         }
 
 
         public string Destination
         {
-            get { return GetString(DestinationName); }
+            get { return (string)Get(DestinationName); }
+        }
+
+
+        public bool Verbose
+        {
+            get
+            {
+                bool? val = (bool?)Get(VerboseName);
+
+                return val.GetValueOrDefault();
+            }
         }
 
 
@@ -124,13 +137,6 @@ namespace Kurdle
 
 
 
-        private string GetString(string name)
-        {
-            return (string) Get(name);
-        }
-
-
-
         private void Set(string name, object value)
         {
             if (_dictionary.ContainsKey(name))
@@ -150,6 +156,15 @@ namespace Kurdle
             if (!string.IsNullOrWhiteSpace(value))
             {
                 Set(name, value);
+            }
+        }
+
+
+        private void SetBool(string name, bool? value)
+        {
+            if (value.HasValue)
+            {
+                Set(name, value.Value);
             }
         }
     }

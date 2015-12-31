@@ -204,6 +204,13 @@
             The name of the program. The default is the executable name.
             </summary>
         </member>
+        <member name="P:Yaclops.GlobalParserSettings.ChildThreshold">
+            <summary>
+            When printing the command summary, if a group has fewer child commands
+            than this threshold, the children are listed. If there are more children,
+            only the group is listed. The default is 3.
+            </summary>
+        </member>
         <member name="M:Yaclops.CommandLineParserSettings`1.#ctor">
             <summary>
             Constructor
@@ -212,6 +219,12 @@
         <member name="P:Yaclops.CommandLineParserSettings`1.NullCommand">
             <summary>
             A func that returns the command that is returned when help or another internal command is parsed.
+            </summary>
+        </member>
+        <member name="P:Yaclops.CommandLineParserSettings`1.DefaultCommand">
+            <summary>
+            A func that returns the default command that is returned if no arguments are supplied.
+            The default is to show help.
             </summary>
         </member>
         <member name="T:Yaclops.ISubCommand">
@@ -296,7 +309,7 @@
             <param name="settings">The settings</param>
             <returns>The builder, to keep the fluentness alive</returns>
         </member>
-        <member name="P:Yaclops.ParserBuilder`1.Parser">
+        <member name="M:Yaclops.ParserBuilder`1.Build">
             <summary>
             Get the resulting parser
             </summary>
