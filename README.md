@@ -20,6 +20,7 @@ some notes that might be helpful:
 
 This tool would not be possible without a number of third party libraries:
 
+- [Markdig](https://github.com/lunet-io/markdig)
 - [RazorEngine](https://antaris.github.io/RazorEngine/) ([github](https://github.com/Antaris/RazorEngine))
 - [CommonMark.NET](https://github.com/Knagis/CommonMark.NET/) and the [CommonMark spec](http://commonmark.org/).
 - [YamlDotNet](http://aaubry.net/pages/yamldotnet.html)  ([github](https://github.com/aaubry/YamlDotNet))
