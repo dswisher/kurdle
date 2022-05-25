@@ -1,9 +1,11 @@
+
 .vs
 *.suo
 *.user
 *.userprefs
 *.swp
+.idea
+
 bin
 obj
-big-sample
-project.lock.json
+
