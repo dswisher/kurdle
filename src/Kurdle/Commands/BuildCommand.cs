@@ -5,20 +5,20 @@ using Serilog;
 
 namespace Kurdle.Commands
 {
-    public sealed class CreateCommand : ICommand<CreateOptions>
+    public class BuildCommand : ICommand<BuildOptions>
     {
         private readonly ILogger logger;
 
-        public CreateCommand(ILogger logger)
+        public BuildCommand(ILogger logger)
         {
             this.logger = logger;
         }
 
 
-        public Task<int> ExecuteAsync(CreateOptions options, CancellationToken cancellationToken)
+        public Task<int> ExecuteAsync(BuildOptions options, CancellationToken cancellationToken)
         {
             // TODO
-            logger.Warning("Create is not yet implemented.");
+            logger.Warning("Build is not yet implemented.");
             return Task.FromResult(1);
         }
     }

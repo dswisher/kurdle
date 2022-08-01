@@ -1,28 +1,66 @@
-﻿using Kurdle.Commands;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using CommandLine;
+using Kurdle.Commands;
+using Kurdle.Options;
 using Microsoft.Extensions.DependencyInjection;
-using Spectre.Console.Cli;
-using Kurdle.Plumbing;
+using Serilog;
 
 namespace Kurdle
 {
-    internal class Program
+    internal static class Program
     {
-        static int Main(string[] args)
+        public static async Task<int> Main(string[] args)
         {
-            var services = new ServiceCollection();
-            // TODO - register some stuff
+            var parsedArgs = Parser.Default.ParseArguments<
+                BuildOptions,
+                CreateOptions>(args);
 
-            var registrar = new TypeRegistrar(services);
-
-            var app = new CommandApp(registrar);
-            app.Configure(config =>
+            // Pull out the common options
+            CommonOptions commonOptions = null;
+            parsedArgs.WithParsed<CommonOptions>(opts =>
             {
-                config.AddCommand<GenerateCommand>("generate");
-
-                config.AddCommand<CreateCommand>("create");
+                commonOptions = opts;
             });
 
-            return app.Run(args);
+            // Set up logging
+            var logConfig = new LoggerConfiguration()
+                .WriteTo.Console();
+
+            if (commonOptions != null && commonOptions.Verbose)
+            {
+                logConfig.MinimumLevel.Debug();
+            }
+
+            Log.Logger = logConfig.CreateLogger();
+
+            // Set up the container
+            // TODO - move this out to a container class
+            var services = new ServiceCollection();
+            services.AddSingleton(Log.Logger);
+
+            services.AddSingleton<BuildCommand>();
+            services.AddSingleton<CreateCommand>();
+
+            var container = services.BuildServiceProvider();
+
+            // Run the correct command
+            return await parsedArgs.MapResult(
+                (BuildOptions opts) => RunAsync<BuildOptions, BuildCommand>(opts, container),
+                (CreateOptions opts) => RunAsync<CreateOptions, CreateCommand>(opts, container),
+                _ => Task.FromResult(1));
+        }
+
+
+        private static async Task<int> RunAsync<TOpt, TCmd>(TOpt options, ServiceProvider container)
+        where TCmd : ICommand<TOpt>
+        {
+            var command = container.GetRequiredService<TCmd>();
+
+            // TODO - create a proper cancellation token
+            var token = default(CancellationToken);
+
+            return await command.ExecuteAsync(options, token);
         }
     }
 }
