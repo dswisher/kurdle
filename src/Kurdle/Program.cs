@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using CommandLine;
 using Kurdle.Commands;
@@ -35,20 +36,18 @@ namespace Kurdle
             Log.Logger = logConfig.CreateLogger();
 
             // Set up the container
-            // TODO - move this out to a container class
             var services = new ServiceCollection();
-            services.AddSingleton(Log.Logger);
 
-            services.AddSingleton<BuildCommand>();
-            services.AddSingleton<CreateCommand>();
+            services.RegisterServices();
 
-            var container = services.BuildServiceProvider();
-
-            // Run the correct command
-            return await parsedArgs.MapResult(
-                (BuildOptions opts) => RunAsync<BuildOptions, BuildCommand>(opts, container),
-                (CreateOptions opts) => RunAsync<CreateOptions, CreateCommand>(opts, container),
-                _ => Task.FromResult(1));
+            using (var container = services.BuildServiceProvider())
+            {
+                // Run the correct command
+                return await parsedArgs.MapResult(
+                    (BuildOptions opts) => RunAsync<BuildOptions, BuildCommand>(opts, container),
+                    (CreateOptions opts) => RunAsync<CreateOptions, CreateCommand>(opts, container),
+                    _ => Task.FromResult(1));
+            }
         }
 
 
@@ -57,10 +56,18 @@ namespace Kurdle
         {
             var command = container.GetRequiredService<TCmd>();
 
-            // TODO - create a proper cancellation token
-            var token = default(CancellationToken);
+            using (var tokenSource = new CancellationTokenSource())
+            {
+                // Shut down semi-gracefully on ctrl+c...
+                Console.CancelKeyPress += (sender, eventArgs) =>
+                {
+                    Log.Warning("*** Cancel event triggered ***");
+                    tokenSource.Cancel();
+                    eventArgs.Cancel = true;
+                };
 
-            return await command.ExecuteAsync(options, token);
+                return await command.ExecuteAsync(options, tokenSource.Token);
+            }
         }
     }
 }

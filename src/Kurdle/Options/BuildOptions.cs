@@ -10,5 +10,8 @@ namespace Kurdle.Options
 
         [Option("rebuild", HelpText = "Do a full rebuild of all files. The default is an incremental build.")]
         public bool Rebuild { get; set; }
+
+        [Option("output", HelpText = "The directory where output will be written.")]
+        public string OutputDir { get; set; }
     }
 }
