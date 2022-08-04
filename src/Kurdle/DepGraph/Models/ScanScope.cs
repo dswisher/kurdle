@@ -8,23 +8,33 @@ namespace Kurdle.DepGraph.Models
     {
         private readonly ScanScope parentScope;
 
-        public ScanScope(DirectoryInfo directory, ScanScope parentScope = null)
+        public ScanScope(DirectoryInfo inputDirectory, DirectoryInfo outputDirectory, ScanScope parentScope = null)
         {
-            Directory = directory;
+            InputDirectory = inputDirectory;
+            OutputDirectory = outputDirectory;
 
             this.parentScope = parentScope;
         }
 
-        public DirectoryInfo Directory { get; }
+        public DirectoryInfo InputDirectory { get; }
+        public DirectoryInfo OutputDirectory { get; }
 
         public IProcessingMode ProcessingMode { get; set; }
 
         public ScanScope Clone(DirectoryInfo subdir)
         {
-            var scope = new ScanScope(subdir, this);
+            // Determine the output directory
+            // TODO - this method of determining the output directory seems overly simplistic, although
+            // I cannot think of a case where it will fail...
+            var outputDir = new DirectoryInfo(Path.Join(OutputDirectory.FullName, subdir.Name));
 
+            // Create the new scope
+            var scope = new ScanScope(subdir, outputDir, this);
+
+            // Copy over some additional bits
             scope.ProcessingMode = ProcessingMode;
 
+            // Return the result
             return scope;
         }
     }

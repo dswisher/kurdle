@@ -46,9 +46,9 @@ namespace Kurdle.Commands
             var graph = await scanner.ScanAsync(cancellationToken);
 
             // Execute the dependency graph
-            // TODO
-            logger.Warning("Build is not yet implemented.");
+            await graph.ExecuteAsync(options.Rebuild, cancellationToken);
 
+            // No errors!
             return 0;
         }
     }

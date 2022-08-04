@@ -41,7 +41,7 @@ namespace Kurdle.DepGraph
             var graph = new DependencyGraph();
 
             // Set up the initial (root) scope
-            var scope = new ScanScope(rootDirectory);
+            var scope = new ScanScope(rootDirectory, outputDirectory);
 
             var config = new ScopeConfig
             {
@@ -61,7 +61,7 @@ namespace Kurdle.DepGraph
         private async Task DoScanAsync(DependencyGraph graph, ScanScope scope, CancellationToken cancellationToken)
         {
             // Get the files, as a hash set
-            var files = scope.Directory.GetFiles().ToHashSet();
+            var files = scope.InputDirectory.GetFiles().ToHashSet();
 
             // Process files, starting with files that update the scope settings, which are known as config files.
             await configScanner.ScanAsync(scope, files, cancellationToken);
@@ -73,7 +73,7 @@ namespace Kurdle.DepGraph
             }
 
             // Process any subdirectories
-            foreach (var subdir in scope.Directory.GetDirectories().OrderBy(x => x.Name))
+            foreach (var subdir in scope.InputDirectory.GetDirectories().OrderBy(x => x.Name))
             {
                 // TODO - scope needs to have inputDirectory, outputDirectory, and cacheDirectory
                 var childScope = scope.Clone(subdir);
