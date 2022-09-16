@@ -14,12 +14,25 @@ namespace Kurdle.DepGraph.Models
             OutputDirectory = outputDirectory;
 
             this.parentScope = parentScope;
+
+            if (parentScope == null)
+            {
+                Depth = 1;
+                Layout = "main";
+            }
+            else
+            {
+                Depth = parentScope.Depth + 1;
+            }
         }
 
         public DirectoryInfo InputDirectory { get; }
         public DirectoryInfo OutputDirectory { get; }
 
+        public int Depth { get; }
+
         public IProcessingMode ProcessingMode { get; set; }
+        public string Layout { get; set; }
 
         public ScanScope Clone(DirectoryInfo subdir)
         {
@@ -33,6 +46,7 @@ namespace Kurdle.DepGraph.Models
 
             // Copy over some additional bits
             scope.ProcessingMode = ProcessingMode;
+            scope.Layout = Layout;
 
             // Return the result
             return scope;

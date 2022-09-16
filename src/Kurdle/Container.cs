@@ -2,6 +2,7 @@ using System;
 using Kurdle.Commands;
 using Kurdle.Config;
 using Kurdle.DepGraph;
+using Kurdle.Layout;
 using Kurdle.Processors.Blog;
 using Kurdle.Processors.Index;
 using Markdig;
@@ -38,6 +39,7 @@ namespace Kurdle
             // Add processor stuff
             services.AddSingleton<IBlogMode, BlogMode>();
             services.AddSingleton<IIndexMode, IndexMode>();
+            services.AddSingleton<ILayoutManager, LayoutManager>();
 
             // Set up the MarkDig pipeline
             // TODO - register our custom pipeline extensions

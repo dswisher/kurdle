@@ -75,7 +75,12 @@ namespace Kurdle.DepGraph
             // Process any subdirectories
             foreach (var subdir in scope.InputDirectory.GetDirectories().OrderBy(x => x.Name))
             {
-                // TODO - scope needs to have inputDirectory, outputDirectory, and cacheDirectory
+                // Ignore the top-level templates directory
+                if (subdir.Name == "templates" && scope.Depth == 1)
+                {
+                    continue;
+                }
+
                 var childScope = scope.Clone(subdir);
 
                 await DoScanAsync(graph, childScope, cancellationToken);

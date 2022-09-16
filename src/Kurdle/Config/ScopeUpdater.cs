@@ -26,6 +26,11 @@ namespace Kurdle.Config
 
         public void Update(ScanScope scope, ScopeConfig config)
         {
+            if (!string.IsNullOrEmpty(config.Layout))
+            {
+                scope.Layout = config.Layout;
+            }
+
             // Set up the processing mode
             switch (config.ProcessingMode)
             {

@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Kurdle.DepGraph;
+using Kurdle.Layout;
 using Kurdle.Options;
 using Serilog;
 
@@ -11,13 +12,16 @@ namespace Kurdle.Commands
     public class BuildCommand : ICommand<BuildOptions>
     {
         private readonly Func<string, string, IDirectoryScanner> scannerFactory;
+        private readonly ILayoutManager layoutManager;
         private readonly ILogger logger;
 
         public BuildCommand(
             Func<string, string, IDirectoryScanner> scannerFactory,
+            ILayoutManager layoutManager,
             ILogger logger)
         {
             this.scannerFactory = scannerFactory;
+            this.layoutManager = layoutManager;
             this.logger = logger;
         }
 
@@ -39,6 +43,10 @@ namespace Kurdle.Commands
                     outDir = Path.Join(root.Parent.FullName, "site");
                 }
             }
+
+            // Tell the layout manager where to find templates
+            // TODO - this seems like an ugly hack. Figure out a better way.
+            layoutManager.TemplateDirectory = Path.Join(rootDir, "templates");
 
             // Scan the directories and build a dependency graph
             var scanner = scannerFactory(rootDir, outDir);

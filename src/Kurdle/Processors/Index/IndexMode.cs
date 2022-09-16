@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Kurdle.DepGraph.Models;
+using Kurdle.Layout;
 using Markdig;
 using Serilog;
 
@@ -11,13 +12,16 @@ namespace Kurdle.Processors.Index
     {
         private readonly Dictionary<string, Action<DependencyGraph, ScanScope, FileInfo>> extensionMap = new();
         private readonly MarkdownPipeline pipeline;
+        private readonly ILayoutManager layoutManager;
         private readonly ILogger logger;
 
         public IndexMode(
             MarkdownPipeline pipeline,
+            ILayoutManager layoutManager,
             ILogger logger)
         {
             this.pipeline = pipeline;
+            this.layoutManager = layoutManager;
             this.logger = logger;
 
             extensionMap.Add(".md", AddMarkdown);
@@ -47,7 +51,11 @@ namespace Kurdle.Processors.Index
             var outputFile = new FileInfo(outputPath);
 
             // Create the processor and hook it into the graph
-            var processor = new MarkdownProcessor(file, outputFile, pipeline, logger);
+            var layoutTemplate = layoutManager.GetTemplate(scope.Layout);
+
+            // TODO - xyzzy - do not pass layoutManager here! Instead, pass the template
+            // TODO - the scope needs to include the current layout, pulled from the config, just like processing mode
+            var processor = new MarkdownProcessor(file, outputFile, pipeline, layoutTemplate, logger);
 
             graph.AddProcessor(processor);
 
